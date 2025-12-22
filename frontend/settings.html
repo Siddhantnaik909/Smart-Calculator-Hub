@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Settings</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Specific Styles for Profile Section */
+        .profile-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); }
+        .profile-pic { width: 60px; height: 60px; background: var(--primary-gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+        <aside class="sidebar">
+            <div class="brand-block"><i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px;"></i>SMART HUB</div>
+            <nav class="side-menu">
+                <a href="index.html"><i class="fa fa-home"></i> Dashboard</a>
+                <a href="calculators.html"><i class="fa-solid fa-calculator"></i> Calculators</a>
+                <a href="history.html"><i class="fa fa-history"></i> History</a>
+                <a href="settings.html" class="active"><i class="fa fa-gear"></i> Settings</a>
+                <a href="about.html"><i class="fa fa-circle-info"></i> About</a>
+            </nav>
+            <div class="sidebar-footer"><p>© 2025 Smart Hub</p></div>
+        </aside>
+        <main class="main-content">
+            <header class="content-header">
+                <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1>Settings</h1>
+            </header>
+            <div class="page-body">
+                <div class="container" style="max-width: 800px; margin-top: 40px;">
+                    <div class="cat-card fade-in delay-1">
+                        <h3>Account</h3>
+                        <div class="profile-header">
+                            <div class="profile-pic"><i class="fa-solid fa-user"></i></div>
+                            <div>
+                                <h4 style="margin: 0; font-size: 1.1rem; color: var(--text-header);">Guest User</h4>
+                                <p style="margin: 0; font-size: 0.9rem; color: var(--text-body);">Not logged in</p>
+                            </div>
+                        </div>
+                        <div class="auth-btn-group">
+                            <button class="btn-auth btn-primary">Log In</button>
+                            <button class="btn-auth btn-outline">Sign Up</button>
+                        </div>
+                    </div>
+                    <div class="cat-card fade-in delay-2" style="margin-top: 30px;">
+                        <h3>Preferences</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span><i class="fa-solid fa-moon"></i> Dark Mode</span>
+                                <label class="toggle-switch"><input type="checkbox" id="darkModeToggle"><span class="slider"></span></label>
+                            </div>
+                            <div class="sub-link">
+                                <span><i class="fa-solid fa-bell"></i> Notifications</span>
+                                <label class="toggle-switch"><input type="checkbox" checked><span class="slider"></span></label>
+                            </div>
+                        </div>
+                        <button class="btn-danger" style="display: none;"><i class="fa-solid fa-right-from-bracket"></i> Log Out</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

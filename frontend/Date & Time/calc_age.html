@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Age & Rashi Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i> SMART HUB
+            </div>
+            <nav class="side-menu">
+                <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+                <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+                <a href="../history.html"><i class="fa fa-history"></i> History</a>
+                <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+                <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+            </nav>
+            <div class="sidebar-footer"><p>© 2024 Smart Hub Products.</p></div>
+        </aside>
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Age & Rashi Calculator</h1>
+            </header>
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="category-grid" style="grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));">
+                        <article class="cat-card stagger-1">
+                            <h3>Age Calculator</h3>
+                            <div class="sub-cat-list">
+                                <div class="sub-link">
+                                    <span>Date of Birth</span>
+                                    <input type="date" id="dobInput" class="form-control">
+                                </div>
+                                <div class="sub-link">
+                                    <span>Age as on</span>
+                                    <input type="date" id="asOfInput" class="form-control">
+                                </div>
+                                <button class="sub-link" id="btnCalcAge" style="background-color: var(--primary-color); color: var(--text-white);">Calculate Age <i class="fa-solid fa-arrow-right arrow"></i></button>
+                            </div>
+                        </article>
+                        <article id="ageResultBox" class="cat-card stagger-2" style="display: none;">
+                            <h3>Your Age</h3>
+                            <div class="sub-cat-list">
+                                <p id="ageResultText" style="font-size: 1.2rem; color: var(--text-header); font-weight: 600;"></p>
+                                <p id="ageExtraInfo" style="font-size: 0.9rem; color: var(--text-body);"></p>
+                            </div>
+                        </article>
+                        <article class="cat-card stagger-3">
+                            <h3>Rashi Calculator (Approx.)</h3>
+                            <div class="sub-cat-list">
+                                <div class="sub-link">
+                                    <span>Date of Birth</span>
+                                    <input type="date" id="rashiDobInput" class="form-control">
+                                </div>
+                                <button class="sub-link" id="btnCalcRashi" style="background-color: var(--accent-cyan); color: var(--text-white);">Find Rashi <i class="fa-solid fa-arrow-right arrow"></i></button>
+                            </div>
+                        </article>
+                        <article id="rashiResultBox" class="cat-card stagger-4" style="display: none;">
+                            <h3>Your Rashi</h3>
+                            <div class="sub-cat-list">
+                                <p id="rashiResultText" style="font-size: 1.2rem; color: var(--text-header); font-weight: 600;"></p>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>SMART HUB | All Rights Reserved © 2025</p></footer>
+            </div>
+        </main>
+    </div>
+    <script src="../script.js"></script>
+    <script>
+        function calculateAge(fromDate, toDate) {
+            if (toDate < fromDate) return null;
+            let years = toDate.getFullYear() - fromDate.getFullYear();
+            let months = toDate.getMonth() - fromDate.getMonth();
+            let days = toDate.getDate() - fromDate.getDate();
+            if (days < 0) {
+                months -= 1;
+                const prevMonth = new Date(toDate.getFullYear(), toDate.getMonth(), 0);
+                days += prevMonth.getDate();
+            }
+            if (months < 0) { years -= 1; months += 12; }
+            return { years, months, days };
+        }
+
+        function handleCalcAge() {
+            const dobInput = document.getElementById("dobInput");
+            const asOfInput = document.getElementById("asOfInput");
+            const resultBox = document.getElementById("ageResultBox");
+            const resultText = document.getElementById("ageResultText");
+            const extraInfo = document.getElementById("ageExtraInfo");
+
+            if (!dobInput.value) { alert("Please select your date of birth."); return; }
+            const dob = new Date(dobInput.value);
+            const asOf = asOfInput.value ? new Date(asOfInput.value) : new Date();
+            const age = calculateAge(dob, asOf);
+            
+            if (!age) { alert("Age as on date must be after the date of birth."); return; }
+
+            const resString = `${age.years} years, ${age.months} months, ${age.days} days`;
+            resultText.textContent = resString;
+            
+            const diffMs = asOf.getTime() - dob.getTime();
+            const totalDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+            extraInfo.textContent = `Total Days: ${totalDays}`;
+            resultBox.style.display = "block";
+
+            saveCalculation('Age Calc', `DOB: ${dobInput.value}`, resString);
+        }
+
+        function getApproxRashi(date) {
+            const d = date.getDate();
+            const m = date.getMonth() + 1;
+            if ((m === 3 && d >= 21) || (m === 4 && d <= 19)) return "Mesh (Aries)";
+            if ((m === 4 && d >= 20) || (m === 5 && d <= 20)) return "Vrishabha (Taurus)";
+            if ((m === 5 && d >= 21) || (m === 6 && d <= 20)) return "Mithuna (Gemini)";
+            if ((m === 6 && d >= 21) || (m === 7 && d <= 22)) return "Karka (Cancer)";
+            if ((m === 7 && d >= 23) || (m === 8 && d <= 22)) return "Simha (Leo)";
+            if ((m === 8 && d >= 23) || (m === 9 && d <= 22)) return "Kanya (Virgo)";
+            if ((m === 9 && d >= 23) || (m === 10 && d <= 22)) return "Tula (Libra)";
+            if ((m === 10 && d >= 23) || (m === 11 && d <= 21)) return "Vrischika (Scorpio)";
+            if ((m === 11 && d >= 22) || (m === 12 && d <= 21)) return "Dhanu (Sagittarius)";
+            if ((m === 12 && d >= 22) || (m === 1 && d <= 19)) return "Makara (Capricorn)";
+            if ((m === 1 && d >= 20) || (m === 2 && d <= 18)) return "Kumbha (Aquarius)";
+            return "Meena (Pisces)";
+        }
+
+        function handleCalcRashi() {
+            const dobInput = document.getElementById("rashiDobInput");
+            const resultBox = document.getElementById("rashiResultBox");
+            const resultText = document.getElementById("rashiResultText");
+
+            if (!dobInput.value) { alert("Select DOB."); return; }
+            const dob = new Date(dobInput.value);
+            const rashi = getApproxRashi(dob);
+            resultText.textContent = rashi;
+            resultBox.style.display = "block";
+
+            saveCalculation('Rashi Calc', `DOB: ${dobInput.value}`, rashi);
+        }
+
+        document.getElementById("btnCalcAge").addEventListener("click", handleCalcAge);
+        document.getElementById("btnCalcRashi").addEventListener("click", handleCalcRashi);
+    </script>
+</body>
+</html>

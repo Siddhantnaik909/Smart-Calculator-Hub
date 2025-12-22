@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Currency Converter</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i>
+                SMART HUB
+            </div>
+            <nav class="side-menu">
+                <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+                <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+                <a href="../history.html"><i class="fa fa-history"></i> History</a>
+                <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+                <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+            </nav>
+            <div class="sidebar-footer"><p>© 2025 Smart Hub Products.</p></div>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Currency Converter</h1>
+            </header>
+
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1">
+                        <h3>Real-Time Exchange Rates</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>Amount</span>
+                                <input type="number" id="amount" class="form-control" placeholder="1.00" value="1.00" min="0">
+                            </div>
+                            <div class="sub-link">
+                                <span>From</span>
+                                <select id="fromCurrency" class="form-control"></select>
+                            </div>
+                            <div class="sub-link">
+                                <span>To</span>
+                                <select id="toCurrency" class="form-control"></select>
+                            </div>
+                            <button id="swapBtn" class="sub-link" style="justify-content: center;"><i class="fas fa-exchange-alt"></i> Swap Currencies</button>
+                        </div>
+                    </div>
+
+                    <div id="resultBox" class="cat-card stagger-2" style="display: none;">
+                        <h3>Conversion Result</h3>
+                        <div id="loader" class="loader" style="display: none;"></div>
+                        <div class="sub-cat-list">
+                            <div id="conversionResult" style="font-size: 2rem; font-weight: 700; color: var(--primary-color); text-align: center; margin-bottom: 1rem;"></div>
+                            <div id="rateInfo" style="text-align: center;"></div>
+                        </div>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>© 2025 Smart Hub Products.</p></footer>
+            </div>
+        </main>
+    </div>
+
+    <script src="../script.js"></script> 
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const fromSelect = document.getElementById('fromCurrency');
+        const toSelect = document.getElementById('toCurrency');
+        const amountInput = document.getElementById('amount');
+        const swapBtn = document.getElementById('swapBtn');
+        const resultBox = document.getElementById('resultBox');
+        const conversionResultEl = document.getElementById('conversionResult');
+        const rateInfoEl = document.getElementById('rateInfo');
+        const loader = document.getElementById('loader');
+
+        const API_URL = 'https://open.er-api.com/v6/latest/USD';
+
+        async function populateCurrencies() {
+            try {
+                loader.style.display = 'block';
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                
+                if (data.result === 'error') throw new Error(data['error-type']);
+
+                const currencies = Object.keys(data.rates);
+                
+                currencies.forEach(currency => {
+                    const fromOption = new Option(currency, currency);
+                    const toOption = new Option(currency, currency);
+                    fromSelect.add(fromOption);
+                    toSelect.add(toOption);
+                });
+
+                fromSelect.value = 'USD';
+                toSelect.value = 'EUR';
+                convertCurrency();
+            } catch (error) {
+                console.error('Error fetching currency list:', error);
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+        
+        async function convertCurrency() {
+            const amount = parseFloat(amountInput.value);
+            const fromCurrency = fromSelect.value;
+            const toCurrency = toSelect.value;
+
+            if (isNaN(amount) || amount < 0) return;
+
+            try {
+                loader.style.display = 'block';
+                resultBox.style.display = 'none';
+
+                const response = await fetch(`https://open.er-api.com/v6/latest/${fromCurrency}`);
+                const data = await response.json();
+
+                if (data.result === 'error') throw new Error(data['error-type']);
+                
+                const rate = data.rates[toCurrency];
+                const convertedAmount = amount * rate;
+
+                conversionResultEl.textContent = `${convertedAmount.toFixed(2)} ${toCurrency}`;
+                rateInfoEl.textContent = `1 ${fromCurrency} = ${rate.toFixed(4)} ${toCurrency}`;
+                resultBox.style.display = 'block';
+
+                // SAVE TO HISTORY
+                saveCalculation('Currency', `${amount} ${fromCurrency} to ${toCurrency}`, `${convertedAmount.toFixed(2)} ${toCurrency}`);
+
+            } catch (error) {
+                console.error('Error during conversion:', error);
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+        
+        function swapCurrencies() {
+            const temp = fromSelect.value;
+            fromSelect.value = toSelect.value;
+            toSelect.value = temp;
+            convertCurrency();
+        }
+
+        // Add debounce to prevent too many API calls
+        let timeout;
+        amountInput.addEventListener('input', () => {
+            clearTimeout(timeout);
+            timeout = setTimeout(convertCurrency, 500);
+        });
+        
+        fromSelect.addEventListener('change', convertCurrency);
+        toSelect.addEventListener('change', convertCurrency);
+        swapBtn.addEventListener('click', swapCurrencies);
+
+        populateCurrencies();
+    });
+    </script>
+</body>
+</html>

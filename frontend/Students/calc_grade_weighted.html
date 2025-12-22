@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SMART HUB | Weighted Grade Calculator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+<div class="dashboard-layout" id="dashboard-wrapper">
+
+    <aside class="sidebar">
+        <div class="brand-block">
+            <i class="fa-solid fa-microchip" style="color:var(--primary-color);margin-right:10px"></i>
+            SMART HUB
+        </div>
+        <nav class="side-menu">
+            <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+            <a href="../calculators.html" class="active"><i class="fa fa-calculator"></i> Calculators</a>
+            <a href="../history.html"><i class="fa fa-history"></i> History</a>
+            <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+            <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="content-header">
+            <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+            <h1>Weighted Grade Calculator</h1>
+        </header>
+
+        <section class="container grid-section">
+
+            <div class="cat-card stagger-1">
+                <h3>Assignments & Weights</h3>
+                <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:15px;">
+                    Enter your grade (0-100) and how much it counts towards the total (Weight %).
+                </p>
+
+                <div id="gradesContainer"></div>
+
+                <div id="tip" style="font-size:0.9rem; margin-top:10px; color:var(--text-muted); min-height:24px;">
+                    <i class="fa-solid fa-scale-balanced"></i> Tip: Weights should ideally add up to 100%.
+                </div>
+
+                <div style="display:flex; gap:10px; margin-top:15px;">
+                    <button id="addRowBtn" class="sub-link" style="flex:1; justify-content:center; border:dashed 2px var(--primary-color); color:var(--primary-color); background:transparent;">
+                        <i class="fa fa-plus"></i> Add Row
+                    </button>
+                    <button id="helpBtn" class="sub-link" style="width:auto; padding:0 15px;">
+                        <i class="fa fa-question"></i>
+                    </button>
+                </div>
+
+                <button id="calculateBtn" class="sub-link" style="margin-top:10px; justify-content:center; background-color:var(--primary-color); color:white;">
+                    Calculate Grade
+                </button>
+            </div>
+
+            <div class="cat-card stagger-2" id="resultBox" style="display:none; text-align:center;">
+                <h3>Final Grade</h3>
+                <div id="finalGrade" style="font-size:3.5rem; font-weight:800; color:var(--primary-color); line-height:1.2;">0%</div>
+                <div id="letterGrade" style="font-size:1.2rem; font-weight:600; color:var(--text-header); margin-top:5px;">Grade: F</div>
+            </div>
+
+            <div class="cat-card stagger-3">
+                <h3><i class="fa-solid fa-list-ol" style="color:var(--accent-cyan)"></i> Step-by-Step</h3>
+                <div id="steps" style="font-size:0.9rem; color:var(--text-body); line-height:1.6;">
+                    Add assignments and click Calculate to see the breakdown.
+                </div>
+            </div>
+
+        </section>
+
+        <footer class="content-footer">SMART HUB | All Rights Reserved © 2025</footer>
+    </main>
+</div>
+
+<div id="helpPanel" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:var(--bg-card); width:90%; max-width:500px; padding:25px; border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,0.2);">
+        <h3 style="margin-top:0; color:var(--primary-color);">Understanding Weighted Grades</h3>
+        
+        
+
+        <p>Unlike a standard average, weighted grades give more importance to specific assignments (like Final Exams).</p>
+        
+        <div style="background:var(--bg-main); padding:10px; border-radius:6px; font-family:monospace; margin:10px 0;">
+            Formula: Σ (Grade × Weight) ÷ Total Weight
+        </div>
+
+        <ul style="padding-left:20px; font-size:0.9rem; color:var(--text-body);">
+            <li><strong>Example:</strong> If a Test is 50% of your grade, it counts 5x more than Homework worth 10%.</li>
+            <li>Ensure your weights sum to 100 for a final course grade.</li>
+        </ul>
+
+        <button id="closeHelpBtn" class="sub-link" style="margin-top:15px; justify-content:center; background-color:var(--text-header); color:white;">Close</button>
+    </div>
+</div>
+
+<script src="../script.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Elements
+    const container = document.getElementById('gradesContainer');
+    const tip = document.getElementById('tip');
+    const steps = document.getElementById('steps');
+    const resultBox = document.getElementById('resultBox');
+    const finalGradeEl = document.getElementById('finalGrade');
+    const letterGradeEl = document.getElementById('letterGrade');
+    
+    // Buttons & Modal
+    const addBtn = document.getElementById('addRowBtn');
+    const calcBtn = document.getElementById('calculateBtn');
+    const helpBtn = document.getElementById('helpBtn');
+    const closeHelpBtn = document.getElementById('closeHelpBtn');
+    const helpPanel = document.getElementById('helpPanel');
+
+    // --- Logic ---
+
+    function addRow() {
+        const row = document.createElement('div');
+        row.className = 'grade-row sub-link fade-in';
+        row.style.gap = '10px';
+        row.style.padding = '10px';
+        row.innerHTML = `
+            <input type="number" class="form-control grade" placeholder="Grade %" min="0" max="100" style="flex:1">
+            <input type="number" class="form-control weight" placeholder="Weight %" min="0" style="flex:1">
+            <button class="remove-btn" style="color:#ef4444; background:transparent; border:none; font-size:1.1rem; cursor:pointer;">
+                <i class="fa fa-times-circle"></i>
+            </button>
+        `;
+        
+        row.querySelector('.remove-btn').onclick = function() {
+            if(document.querySelectorAll('.grade-row').length > 1) row.remove();
+        };
+        
+        container.appendChild(row);
+    }
+
+    function calculateGrade() {
+        let totalWeighted = 0;
+        let totalWeight = 0;
+        let stepLog = '';
+        let valid = true;
+        let hasData = false;
+
+        // Reset UI
+        tip.innerHTML = '<i class="fa-solid fa-scale-balanced"></i> Tip: Weights should ideally add up to 100%.';
+        tip.style.color = 'var(--text-muted)';
+
+        const rows = document.querySelectorAll('.grade-row');
+
+        rows.forEach((r, i) => {
+            const g = parseFloat(r.querySelector('.grade').value);
+            const w = parseFloat(r.querySelector('.weight').value);
+
+            if (isNaN(g) || isNaN(w) || g < 0 || w <= 0) {
+                // Skip empty rows, but valid=false if partially filled
+                if(!isNaN(g) || !isNaN(w)) valid = false;
+                return;
+            }
+
+            hasData = true;
+            const contribution = g * w;
+            totalWeighted += contribution;
+            totalWeight += w;
+
+            stepLog += `<div style="border-bottom:1px solid var(--border-color); padding:5px 0;">
+                Row ${i + 1}: ${g}% × ${w} weight = <strong>${contribution.toFixed(1)}</strong>
+            </div>`;
+        });
+
+        if (!hasData || !valid) {
+            tip.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Error: Please enter valid grades and weights.';
+            tip.style.color = '#ef4444';
+            return;
+        }
+
+        // Warning if weights != 100 (but still calculate)
+        if (totalWeight !== 100) {
+            tip.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> Warning: Total weight is ${totalWeight}% (Standard is 100%)`;
+            tip.style.color = '#f59e0b';
+        }
+
+        const final = totalWeighted / totalWeight;
+        
+        // Determine Letter
+        let letter = 'F';
+        if (final >= 90) letter = 'A';
+        else if (final >= 80) letter = 'B';
+        else if (final >= 70) letter = 'C';
+        else if (final >= 60) letter = 'D';
+
+        // Update UI
+        finalGradeEl.textContent = final.toFixed(2) + "%";
+        letterGradeEl.textContent = `Letter Grade: ${letter}`;
+        
+        steps.innerHTML = stepLog + `
+            <div style="margin-top:10px; padding-top:10px; font-weight:bold; color:var(--primary-color);">
+                Total Points (${totalWeighted.toFixed(1)}) ÷ Total Weight (${totalWeight}) = ${final.toFixed(2)}%
+            </div>`;
+        
+        resultBox.style.display = 'block';
+
+        // History API
+        if (typeof saveCalculation === "function") {
+            saveCalculation(
+                "Weighted Grade",
+                `Assignments: ${rows.length} (Total Weight: ${totalWeight}%)`,
+                `Final: ${final.toFixed(2)}% (${letter})`
+            );
+        }
+    }
+
+    // Modal Logic
+    helpBtn.onclick = () => { helpPanel.style.display = 'flex'; };
+    closeHelpBtn.onclick = () => { helpPanel.style.display = 'none'; };
+    helpPanel.onclick = (e) => { if(e.target === helpPanel) helpPanel.style.display = 'none'; };
+
+    // Initial Rows
+    addBtn.onclick = addRow;
+    calcBtn.onclick = calculateGrade;
+    addRow(); addRow(); addRow();
+});
+</script>
+</body>
+</html>

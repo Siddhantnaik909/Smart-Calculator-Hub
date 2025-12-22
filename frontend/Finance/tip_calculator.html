@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Tip Calculator</title>
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<div class="dashboard-layout" id="dashboard-wrapper">
+    <div class="overlay" id="mobile-overlay"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="brand-block">
+            <i class="fa-solid fa-microchip"
+               style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i>
+            SMART HUB
+        </div>
+
+        <nav class="side-menu">
+            <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+            <a href="../calculators.html" class="active">
+                <i class="fa-solid fa-calculator"></i> Calculators
+            </a>
+            <a href="../history.html"><i class="fa fa-history"></i> History</a>
+            <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+            <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <p>© 2025 Smart Hub Products.</p>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <header class="content-header">
+            <div class="mobile-toggle" id="mobile-toggle-btn">
+                <i class="fa fa-bars"></i>
+            </div>
+            <h1 class="fade-in">Tip Calculator</h1>
+        </header>
+
+        <div class="page-body">
+            <section class="container grid-section fade-in delay-1">
+
+                <!-- INPUT CARD -->
+                <div class="cat-card stagger-1">
+                    <h3>Bill & Tip Details</h3>
+
+                    <div class="sub-cat-list">
+
+                        <div class="sub-link">
+                            <span>Currency</span>
+                            <select id="currency" class="form-control">
+                                <option value="$">USD ($)</option>
+                                <option value="₹">INR (₹)</option>
+                                <option value="€">EUR (€)</option>
+                                <option value="£">GBP (£)</option>
+                            </select>
+                        </div>
+
+                        <div class="sub-link">
+                            <span>Bill Amount</span>
+                            <input type="number" id="billAmount"
+                                   class="form-control"
+                                   placeholder="0.00" min="0" step="0.01">
+                        </div>
+
+                        <div class="sub-link">
+                            <span>Tip Percentage:
+                                <strong id="tipPercentValue">15%</strong>
+                            </span>
+                            <input type="range"
+                                   id="tipSlider"
+                                   min="0"
+                                   max="50"
+                                   value="15"
+                                   class="form-control">
+                        </div>
+
+                        <div class="sub-link">
+                            <span>Number of People</span>
+                            <input type="number" id="people"
+                                   class="form-control"
+                                   value="1" min="1">
+                        </div>
+
+                        <button id="saveBtn"
+                                class="sub-link"
+                                style="justify-content: center;
+                                       background-color: var(--primary-color);
+                                       color: var(--text-white);">
+                            Save Calculation
+                        </button>
+
+                    </div>
+                </div>
+
+                <!-- RESULT CARD -->
+                <div class="cat-card stagger-2">
+                    <h3>Split & Total</h3>
+
+                    <div class="sub-cat-list">
+
+                        <div class="sub-link">
+                            <span>Tip Amount</span>
+                            <span id="tipAmount" class="value">$0.00</span>
+                        </div>
+
+                        <div class="sub-link total-bill"
+                             style="background-color: var(--bg-main);">
+                            <span>Total Bill</span>
+                            <span id="totalBill"
+                                  class="value"
+                                  style="color: var(--primary-color);">
+                                $0.00
+                            </span>
+                        </div>
+
+                        <div class="sub-link per-person">
+                            <span>Per Person</span>
+                            <span id="perPerson" class="value">$0.00</span>
+                        </div>
+
+                    </div>
+                </div>
+
+            </section>
+
+            <footer class="content-footer">
+                <p>© 2025 Smart Hub Products.</p>
+            </footer>
+        </div>
+    </main>
+</div>
+
+<!-- GLOBAL SCRIPT -->
+<script src="../script.js"></script>
+
+<!-- PAGE SCRIPT -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const billInput = document.getElementById('billAmount');
+    const tipSlider = document.getElementById('tipSlider');
+    const peopleInput = document.getElementById('people');
+    const currencySelect = document.getElementById('currency');
+    const saveBtn = document.getElementById('saveBtn');
+
+    const tipPercentEl = document.getElementById('tipPercentValue');
+    const tipAmountEl = document.getElementById('tipAmount');
+    const totalBillEl = document.getElementById('totalBill');
+    const perPersonEl = document.getElementById('perPerson');
+
+    function calculate(save = false) {
+
+        const bill = parseFloat(billInput.value);
+        const tipPercent = parseInt(tipSlider.value, 10);
+        const people = parseInt(peopleInput.value, 10);
+        const symbol = currencySelect.value;
+
+        if (isNaN(bill) || bill < 0 || isNaN(people) || people <= 0) {
+            tipAmountEl.textContent = `${symbol}0.00`;
+            totalBillEl.textContent = `${symbol}0.00`;
+            perPersonEl.textContent = `${symbol}0.00`;
+            return;
+        }
+
+        const tipAmount = bill * (tipPercent / 100);
+        const totalBill = bill + tipAmount;
+        const perPerson = totalBill / people;
+
+        tipPercentEl.textContent = `${tipPercent}%`;
+        tipAmountEl.textContent = `${symbol}${tipAmount.toFixed(2)}`;
+        totalBillEl.textContent = `${symbol}${totalBill.toFixed(2)}`;
+        perPersonEl.textContent = `${symbol}${perPerson.toFixed(2)}`;
+
+        if (save && bill > 0 && typeof saveCalculation === "function") {
+            saveCalculation(
+                "Tip Calculator",
+                `Bill: ${symbol}${bill.toFixed(2)}, Tip: ${tipPercent}%, People: ${people}`,
+                `Total: ${symbol}${totalBill.toFixed(2)} | Per Person: ${symbol}${perPerson.toFixed(2)}`
+            );
+        }
+    }
+
+    billInput.addEventListener('input', () => calculate(false));
+    tipSlider.addEventListener('input', () => calculate(false));
+    peopleInput.addEventListener('input', () => calculate(false));
+    currencySelect.addEventListener('change', () => calculate(false));
+    saveBtn.addEventListener('click', () => calculate(true));
+
+    calculate(false);
+});
+</script>
+
+</body>
+</html>

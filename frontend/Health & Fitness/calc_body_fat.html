@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Body Fat Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i>
+                SMART HUB
+            </div>
+            <nav class="side-menu">
+                <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+                <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+                <a href="../history.html"><i class="fa fa-history"></i> History</a>
+                <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+                <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+            </nav>
+            <div class="sidebar-footer"><p>© 2025 Smart Hub Products.</p></div>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Body Fat Calculator</h1>
+            </header>
+
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1">
+                        <h3>Measurements (in cm)</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>Gender</span>
+                                <select id="gender" class="form-control" onchange="toggleHipInput()">
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                            <div class="sub-link"><span>Height</span><input type="number" id="height" class="form-control" placeholder="178"></div>
+                            <div class="sub-link"><span>Neck Circumference</span><input type="number" id="neck" class="form-control" placeholder="40"></div>
+                            <div class="sub-link"><span>Waist Circumference</span><input type="number" id="waist" class="form-control" placeholder="90"></div>
+                            <div class="sub-link" id="hipGroup" style="display: none;"><span>Hip Circumference</span><input type="number" id="hip" class="form-control" placeholder="95"></div>
+                            <button onclick="calcBF()" class="sub-link" style="justify-content: center; background-color: var(--primary-color); color: white;">Calculate %</button>
+                        </div>
+                    </div>
+
+                    <div id="resultBox" class="cat-card stagger-2" style="display: none;">
+                        <h3>Results</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link" style="flex-direction: column; align-items: center; background-color: var(--bg-main);">
+                                <span id="resBF" style="font-size: 2.5rem; font-weight: 800; color: var(--primary-color);">0%</span>
+                                <span id="resCat" style="font-weight: 600; color: var(--text-muted);">Category</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cat-card stagger-3">
+                        <h3><i class="fa-solid fa-ruler-combined" style="color: var(--accent-cyan);"></i> About Body Fat</h3>
+                        <div style="font-size: 0.9rem; color: var(--text-body); line-height: 1.6;">
+                            <p style="margin-bottom: 8px;"><strong>What:</strong> This tool estimates the percentage of your total weight that is adipose tissue (fat).</p>
+                            <p style="margin-bottom: 8px;"><strong>Why:</strong> Body fat % is a superior indicator of fitness compared to BMI because it distinguishes between muscle and fat mass.</p>
+                            <p style="margin-bottom: 15px;"><strong>How:</strong> It uses the <em>US Navy Method</em>, calculating body density based on the relationship between your height and body circumferences.</p>
+                            
+                            <div style="background: rgba(16, 185, 129, 0.1); padding: 15px; border-radius: 8px; border-left: 4px solid #10b981;">
+                                <strong>💡 Smart Tip:</strong> Measure first thing in the morning before eating. Pull the tape measure snug but not tight against the skin.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>SMART HUB | All Rights Reserved © 2025</p></footer>
+            </div>
+        </main>
+    </div>
+    
+    <script src="../script.js"></script>
+    <script>
+        function toggleHipInput() {
+            const g = document.getElementById('gender').value;
+            document.getElementById('hipGroup').style.display = (g === 'female') ? 'flex' : 'none';
+        }
+
+        function calcBF() {
+            const gender = document.getElementById('gender').value;
+            const h = parseFloat(document.getElementById('height').value);
+            const n = parseFloat(document.getElementById('neck').value);
+            const w = parseFloat(document.getElementById('waist').value);
+            
+            if(!h || !n || !w) { alert("Please fill in all fields."); return; }
+
+            let bf = 0;
+            if (gender === 'male') {
+                bf = 495 / (1.0324 - 0.19077 * Math.log10(w - n) + 0.15456 * Math.log10(h)) - 450;
+            } else {
+                const hip = parseFloat(document.getElementById('hip').value);
+                if(!hip) { alert("Please fill in hip size."); return; }
+                bf = 495 / (1.29579 - 0.35004 * Math.log10(w + hip - n) + 0.22100 * Math.log10(h)) - 450;
+            }
+
+            let cat = "";
+            if (gender === 'male') {
+                if(bf < 6) cat = "Essential Fat";
+                else if(bf < 14) cat = "Athletes";
+                else if(bf < 18) cat = "Fitness";
+                else if(bf < 25) cat = "Average";
+                else cat = "Obese";
+            } else {
+                if(bf < 14) cat = "Essential Fat";
+                else if(bf < 21) cat = "Athletes";
+                else if(bf < 25) cat = "Fitness";
+                else if(bf < 32) cat = "Average";
+                else cat = "Obese";
+            }
+
+            document.getElementById('resBF').innerText = bf.toFixed(1) + "%";
+            document.getElementById('resCat').innerText = cat;
+            document.getElementById('resultBox').style.display = 'block';
+
+            // SAVE TO HISTORY
+            saveCalculation('Body Fat', `Gender: ${gender}, Waist: ${w}cm`, `Result: ${bf.toFixed(1)}% (${cat})`);
+        }
+    </script>
+</body>
+</html>

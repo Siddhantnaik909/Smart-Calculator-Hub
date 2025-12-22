@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Time Zone Converter</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i>
+                SMART HUB
+            </div>
+            <nav class="side-menu">
+                <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+                <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+                <a href="../history.html"><i class="fa fa-history"></i> History</a>
+                <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+                <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+            </nav>
+            <div class="sidebar-footer"><p>© 2024 Smart Hub Products.</p></div>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Time Zone Converter</h1>
+            </header>
+
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1">
+                        <h3>Select Zones</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>Date & Time</span>
+                                <input type="datetime-local" id="localTime" class="form-control">
+                            </div>
+                            <div class="sub-link">
+                                <span>From Timezone</span>
+                                <select id="fromTz" class="form-control"></select>
+                            </div>
+                            
+                            <button class="sub-link" onclick="swapZones()" style="justify-content: center; color: var(--primary-color);">
+                                <i class="fa-solid fa-arrow-right-arrow-left"></i> Swap Zones
+                            </button>
+
+                            <div class="sub-link">
+                                <span>To Timezone</span>
+                                <select id="toTz" class="form-control"></select>
+                            </div>
+
+                            <button class="sub-link" onclick="convertTime()" style="background-color: var(--primary-color); color: var(--text-white); justify-content: center;">
+                                Convert Time
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="resultBox" class="cat-card stagger-2" style="display: none;">
+                        <h3>Converted Time</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link" style="justify-content: center; flex-direction: column; background-color: var(--bg-main);">
+                                <span id="displayTime" style="font-size: 2rem; font-weight: 800; color: var(--primary-color);">--:--</span>
+                                <span id="displayDate" style="color: var(--text-header); font-weight: 600; margin-top: 5px;">---</span>
+                                <span id="displayZone" style="color: var(--text-muted); font-size: 0.85rem; margin-top: 5px;">---</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>SMART HUB | All Rights Reserved © 2025</p></footer>
+            </div>
+        </main>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+        // Custom list with Mumbai/Delhi mapped to correct TimeZone ID
+        const timezones = [
+            { label: "Mumbai (India)", value: "Asia/Kolkata" },
+            { label: "Delhi (India)", value: "Asia/Kolkata" },
+            { label: "Kolkata (India)", value: "Asia/Kolkata" },
+            { label: "UTC (Universal)", value: "UTC" },
+            { label: "New York (USA)", value: "America/New_York" },
+            { label: "London (UK)", value: "Europe/London" },
+            { label: "Tokyo (Japan)", value: "Asia/Tokyo" },
+            { label: "Sydney (Australia)", value: "Australia/Sydney" },
+            { label: "Los Angeles (USA)", value: "America/Los_Angeles" },
+            { label: "Paris (France)", value: "Europe/Paris" },
+            { label: "Dubai (UAE)", value: "Asia/Dubai" },
+            { label: "Singapore", value: "Asia/Singapore" }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const fromSel = document.getElementById('fromTz');
+            const toSel = document.getElementById('toTz');
+            const localInput = document.getElementById('localTime');
+
+            // Populate Dropdowns
+            timezones.forEach(tz => {
+                fromSel.add(new Option(tz.label, tz.value));
+                toSel.add(new Option(tz.label, tz.value));
+            });
+
+            // Set current time in local input
+            const now = new Date();
+            const offsetMs = now.getTimezoneOffset() * 60 * 1000;
+            const localISOTime = new Date(now.getTime() - offsetMs).toISOString().slice(0, 16);
+            localInput.value = localISOTime;
+
+            // Auto-select defaults
+            const userTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            fromSel.value = userTz; 
+            // Default target: New York if user is in India, else India
+            toSel.value = (userTz === "Asia/Kolkata") ? "America/New_York" : "Asia/Kolkata";
+        });
+
+        function swapZones() {
+            const fromSel = document.getElementById('fromTz');
+            const toSel = document.getElementById('toTz');
+            const temp = fromSel.value;
+            fromSel.value = toSel.value;
+            toSel.value = temp;
+        }
+
+        function convertTime() {
+            const timeVal = document.getElementById('localTime').value;
+            const toTzValue = document.getElementById('toTz').value;
+            // Get the text label (e.g., "Mumbai") for display/history
+            const toTzLabel = document.getElementById('toTz').options[document.getElementById('toTz').selectedIndex].text;
+
+            if(!timeVal) { alert("Please select a date and time"); return; }
+
+            const dateObj = new Date(timeVal);
+            
+            // Format options
+            const options = {
+                timeZone: toTzValue,
+                year: 'numeric', month: 'short', day: 'numeric',
+                hour: '2-digit', minute: '2-digit', hour12: true
+            };
+            
+            const formatter = new Intl.DateTimeFormat('en-US', options);
+            const resultStr = formatter.format(dateObj); 
+            
+            const parts = resultStr.split(', ');
+            const datePart = parts[0] + ", " + parts[1];
+            const timePart = parts[2];
+
+            let icon = '<i class="fa fa-clock"></i>';
+            if(timePart.includes('PM')) icon = '<i class="fa fa-moon"></i>';
+            else icon = '<i class="fa fa-sun"></i>';
+
+            document.getElementById('displayTime').innerHTML = `${icon} ${timePart}`;
+            document.getElementById('displayDate').innerText = datePart;
+            document.getElementById('displayZone').innerText = toTzLabel;
+            
+            document.getElementById('resultBox').style.display = 'block';
+
+            // Save to History using the Label (Mumbai) not just the ID
+            saveCalculation('Time Zone', `Input: ${timeVal.replace('T', ' ')}`, `Result: ${timePart} (${toTzLabel})`);
+        }
+    </script>
+</body>
+</html>

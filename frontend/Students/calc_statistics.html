@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SMART HUB | Statistics Calculator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+<div class="dashboard-layout" id="dashboard-wrapper">
+
+    <aside class="sidebar">
+        <div class="brand-block">
+            <i class="fa-solid fa-microchip" style="color:var(--primary-color);margin-right:10px"></i>
+            SMART HUB
+        </div>
+        <nav class="side-menu">
+            <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+            <a href="../calculators.html" class="active"><i class="fa fa-calculator"></i> Calculators</a>
+            <a href="../history.html"><i class="fa fa-history"></i> History</a>
+            <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+            <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="content-header">
+            <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+            <h1>Statistics Calculator</h1>
+        </header>
+
+        <section class="container grid-section">
+
+            <div class="cat-card stagger-1">
+                <h3>Dataset</h3>
+                <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:10px;">
+                    Enter numbers separated by commas or spaces (e.g., 10, 20, 35).
+                </p>
+
+                <textarea id="dataSet" class="form-control" placeholder="10, 20, 20, 35, 50" style="height:100px; resize:vertical;"></textarea>
+
+                <div class="sub-link" style="margin-top:15px; padding:0; border:none;">
+                    <span style="font-size:0.9rem;">Std. Deviation Mode:</span>
+                    <select id="stdType" class="form-control" style="width:auto; flex:1;">
+                        <option value="population">Population (σ)</option>
+                        <option value="sample">Sample (s)</option>
+                    </select>
+                </div>
+
+                <div id="tip" style="font-size:0.9rem; margin-top:8px; color:var(--text-muted); min-height:24px;">
+                    <i class="fa-solid fa-info-circle"></i> Tip: Use "Sample" for partial data, "Population" for full data.
+                </div>
+
+                <div style="display:flex; gap:10px; margin-top:15px;">
+                    <button id="calcBtn" class="sub-link" style="background:var(--primary-color); color:white; flex:1; justify-content:center;">
+                        Analyze Data
+                    </button>
+                    <button id="helpBtn" class="sub-link" style="width:auto; padding:0 15px;">
+                        <i class="fa fa-question"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="resultBox" class="cat-card stagger-2" style="display:none;">
+                <h3>Results</h3>
+                <div class="sub-cat-list">
+                    <div class="sub-link" style="justify-content:space-between;"><span>Count (n)</span><span id="resCount" style="font-weight:bold;">0</span></div>
+                    <div class="sub-link" style="justify-content:space-between;"><span>Mean (x̄)</span><span id="resMean" style="font-weight:bold; color:var(--primary-color);">0</span></div>
+                    <div class="sub-link" style="justify-content:space-between;"><span>Median</span><span id="resMedian" style="font-weight:bold;">0</span></div>
+                    <div class="sub-link" style="justify-content:space-between;"><span>Mode</span><span id="resMode" style="font-weight:bold;">0</span></div>
+                    <div class="sub-link" style="justify-content:space-between;"><span>Range</span><span id="resRange" style="font-weight:bold;">0</span></div>
+                    <div class="sub-link" style="justify-content:space-between;"><span>Std Dev</span><span id="resStd" style="font-weight:bold; color:var(--accent-cyan);">0</span></div>
+                </div>
+            </div>
+
+            <div class="cat-card stagger-3">
+                <h3><i class="fa-solid fa-chart-simple" style="color:var(--accent-cyan)"></i> Key Concepts</h3>
+                
+
+[Image of normal distribution curve]
+
+                <ul style="font-size:0.9rem; color:var(--text-body); padding-left:20px; line-height:1.6;">
+                    <li><strong>Mean:</strong> The arithmetic average of the data.</li>
+                    <li><strong>Median:</strong> The middle value when data is sorted.</li>
+                    <li><strong>Mode:</strong> The value that appears most often.</li>
+                    <li><strong>Std Dev:</strong> Measures how spread out the numbers are.</li>
+                </ul>
+            </div>
+
+        </section>
+
+        <footer class="content-footer">SMART HUB | All Rights Reserved © 2025</footer>
+    </main>
+</div>
+
+<div id="helpPanel" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:var(--bg-card); width:90%; max-width:500px; padding:25px; border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,0.2);">
+        <h3 style="margin-top:0; color:var(--primary-color);">Population vs Sample</h3>
+        <p>Which Standard Deviation should you use?</p>
+        
+        <ul style="font-size:0.9rem; color:var(--text-body); padding-left:20px;">
+            <li><strong>Population (σ):</strong> Use when you have data for <em>every member</em> of the group (e.g., grades of every student in class). Divide by <strong>N</strong>.</li>
+            <li><strong>Sample (s):</strong> Use when your data represents a <em>subset</em> of a larger group (e.g., surveying 50 people out of 1000). Divide by <strong>N-1</strong>.</li>
+        </ul>
+
+        <button id="closeHelpBtn" class="sub-link" style="margin-top:15px; justify-content:center; background-color:var(--text-header); color:white;">Close</button>
+    </div>
+</div>
+
+<script src="../script.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const dataSetInput = document.getElementById('dataSet');
+    const stdTypeSelect = document.getElementById('stdType');
+    const calcBtn = document.getElementById('calcBtn');
+    const tip = document.getElementById('tip');
+    const resultBox = document.getElementById('resultBox');
+    
+    // Help Modal
+    const helpBtn = document.getElementById('helpBtn');
+    const helpPanel = document.getElementById('helpPanel');
+    const closeHelpBtn = document.getElementById('closeHelpBtn');
+
+    calcBtn.onclick = calculateStats;
+
+    function calculateStats(){
+        const raw = dataSetInput.value.trim();
+        
+        // Reset UI
+        tip.innerHTML = '<i class="fa-solid fa-info-circle"></i> Tip: Use "Sample" for partial data, "Population" for full data.';
+        tip.style.color = "var(--text-muted)";
+
+        if(!raw){
+            showError("Dataset is empty. Please enter numbers.");
+            return;
+        }
+
+        // Parse & Sort Numerically (Fix: default sort is alphabetical)
+        const nums = raw.split(/[\s,]+/)
+            .map(Number)
+            .filter(n => !isNaN(n))
+            .sort((a,b) => a - b);
+
+        if(nums.length === 0){
+            showError("No valid numbers found. Check your input format.");
+            return;
+        }
+
+        const n = nums.length;
+        const sum = nums.reduce((a,b) => a + b, 0);
+        const mean = sum / n;
+
+        // Median Logic
+        let median;
+        const mid = Math.floor(n / 2);
+        if(n % 2 === 0){
+            median = (nums[mid - 1] + nums[mid]) / 2;
+        } else {
+            median = nums[mid];
+        }
+
+        // Mode Logic
+        const freq = {};
+        let maxF = 0;
+        nums.forEach(v => {
+            freq[v] = (freq[v] || 0) + 1;
+            maxF = Math.max(maxF, freq[v]);
+        });
+        // Find all modes (can be multimodal)
+        const modes = Object.keys(freq).filter(v => freq[v] === maxF && maxF > 1);
+        const modeStr = modes.length ? modes.join(', ') : "None";
+
+        // Range
+        const range = nums[n-1] - nums[0];
+
+        // Standard Deviation
+        const stdType = stdTypeSelect.value;
+        const varianceDenominator = (stdType === 'sample' && n > 1) ? n - 1 : n;
+        const variance = nums.reduce((a, v) => a + Math.pow(v - mean, 2), 0) / varianceDenominator;
+        const std = Math.sqrt(variance);
+
+        // Display Results
+        document.getElementById('resCount').textContent = n;
+        document.getElementById('resMean').textContent = mean.toFixed(2);
+        document.getElementById('resMedian').textContent = median;
+        document.getElementById('resMode').textContent = modeStr;
+        document.getElementById('resRange').textContent = range;
+        document.getElementById('resStd').textContent = std.toFixed(2);
+        
+        resultBox.style.display = 'block';
+
+        // History API
+        if(typeof saveCalculation === "function"){
+            const preview = nums.slice(0, 5).join(', ') + (n > 5 ? '...' : '');
+            saveCalculation(
+                "Statistics",
+                `Data: [${preview}]`,
+                `Mean: ${mean.toFixed(2)}, Median: ${median}`
+            );
+        }
+    }
+
+    function showError(msg){
+        tip.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${msg}`;
+        tip.style.color = "#ef4444";
+    }
+
+    // Modal Logic
+    helpBtn.onclick = () => helpPanel.style.display = 'flex';
+    closeHelpBtn.onclick = () => helpPanel.style.display = 'none';
+    helpPanel.onclick = (e) => { if(e.target === helpPanel) helpPanel.style.display = 'none'; };
+});
+</script>
+</body>
+</html>

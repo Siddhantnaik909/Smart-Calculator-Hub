@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SMART HUB | Quadratic Solver</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+<div class="dashboard-layout" id="dashboard-wrapper">
+
+    <aside class="sidebar">
+        <div class="brand-block">
+            <i class="fa-solid fa-microchip" style="color:var(--primary-color);margin-right:10px"></i>
+            SMART HUB
+        </div>
+        <nav class="side-menu">
+            <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+            <a href="../calculators.html" class="active"><i class="fa fa-calculator"></i> Calculators</a>
+            <a href="../history.html"><i class="fa fa-history"></i> History</a>
+            <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+            <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="content-header">
+            <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+            <h1>Quadratic Equation Solver</h1>
+        </header>
+
+        <section class="container grid-section">
+
+            <div class="cat-card stagger-1">
+                <h3>Equation: ax² + bx + c = 0</h3>
+
+                <div class="sub-cat-list" style="flex-direction:row; gap:10px;">
+                    <div style="flex:1">
+                        <label style="font-size:0.8rem; color:var(--text-muted)">a</label>
+                        <input id="valA" class="form-control" type="number" placeholder="1">
+                    </div>
+                    <div style="flex:1">
+                        <label style="font-size:0.8rem; color:var(--text-muted)">b</label>
+                        <input id="valB" class="form-control" type="number" placeholder="-5">
+                    </div>
+                    <div style="flex:1">
+                        <label style="font-size:0.8rem; color:var(--text-muted)">c</label>
+                        <input id="valC" class="form-control" type="number" placeholder="6">
+                    </div>
+                </div>
+
+                <div id="tip" style="font-size:0.9rem; margin-top:8px; color:var(--text-muted); min-height:24px;">
+                    <i class="fa-solid fa-info-circle"></i> Tip: Coefficient 'a' cannot be zero.
+                </div>
+
+                <div style="display:flex; gap:10px; margin-top:15px;">
+                    <button id="solveBtn" class="sub-link" style="background:var(--primary-color); color:white; flex:1; justify-content:center;">
+                        Solve
+                    </button>
+                    <button id="helpBtn" class="sub-link" style="width:auto; padding:0 15px;">
+                        <i class="fa fa-question"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="resultBox" class="cat-card stagger-2" style="display:none; text-align:center;">
+                <h3>Roots</h3>
+                <div class="sub-cat-list">
+                    <div class="sub-link" style="justify-content:space-between;">
+                        <span style="font-weight:bold;">x₁</span>
+                        <span id="root1" style="color:var(--primary-color); font-weight:600;"></span>
+                    </div>
+                    <div class="sub-link" style="justify-content:space-between;">
+                        <span style="font-weight:bold;">x₂</span>
+                        <span id="root2" style="color:var(--primary-color); font-weight:600;"></span>
+                    </div>
+                </div>
+                <p id="rootInfo" style="margin-top:10px; font-size:0.9rem; color:var(--text-muted);"></p>
+            </div>
+
+            <div class="cat-card stagger-3">
+                <h3><i class="fa-solid fa-square-root-variable" style="color:var(--accent-cyan)"></i> The Quadratic Formula</h3>
+                
+                
+
+[Image of Quadratic Formula]
+
+
+                <p style="font-size:0.9rem; color:var(--text-body); margin-top:10px;">
+                    The <strong>Discriminant (D)</strong> is <code>b² - 4ac</code>.
+                </p>
+                <ul style="font-size:0.9rem; color:var(--text-body); padding-left:20px;">
+                    <li>If D > 0 → Two real, distinct roots.</li>
+                    <li>If D = 0 → One real, repeated root.</li>
+                    <li>If D < 0 → Two complex (imaginary) roots.</li>
+                </ul>
+            </div>
+
+        </section>
+
+        <footer class="content-footer">SMART HUB | All Rights Reserved © 2025</footer>
+    </main>
+</div>
+
+<div id="helpPanel" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:var(--bg-card); width:90%; max-width:500px; padding:25px; border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,0.2);">
+        <h3 style="margin-top:0; color:var(--primary-color);">Solver Logic</h3>
+        <p>This tool finds the x-intercepts of a parabola described by <code>y = ax² + bx + c</code>.</p>
+        
+        <div style="background:var(--bg-main); padding:10px; border-radius:6px; font-family:monospace; margin:10px 0;">
+            x = [-b ± √(b² - 4ac)] / 2a
+        </div>
+
+        <button id="closeHelpBtn" class="sub-link" style="margin-top:15px; justify-content:center; background-color:var(--text-header); color:white;">Close</button>
+    </div>
+</div>
+
+<script src="../script.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Elements
+    const valA = document.getElementById('valA');
+    const valB = document.getElementById('valB');
+    const valC = document.getElementById('valC');
+    const solveBtn = document.getElementById('solveBtn');
+    const tip = document.getElementById('tip');
+    const resultBox = document.getElementById('resultBox');
+    const root1El = document.getElementById('root1');
+    const root2El = document.getElementById('root2');
+    const rootInfoEl = document.getElementById('rootInfo');
+    
+    // Help Modal
+    const helpBtn = document.getElementById('helpBtn');
+    const helpPanel = document.getElementById('helpPanel');
+    const closeHelpBtn = document.getElementById('closeHelpBtn');
+
+    solveBtn.onclick = solveQuadratic;
+
+    function solveQuadratic(){
+        const a = parseFloat(valA.value);
+        const b = parseFloat(valB.value);
+        const c = parseFloat(valC.value);
+
+        // Reset UI
+        tip.style.color = "var(--text-muted)";
+        tip.innerHTML = '<i class="fa-solid fa-info-circle"></i> Tip: Coefficient "a" cannot be zero.';
+
+        if([a,b,c].some(v => isNaN(v))){
+            showError("Please enter valid numbers for a, b, and c.");
+            return;
+        }
+        if(a === 0){
+            showError("Coefficient 'a' cannot be zero (not a quadratic).");
+            return;
+        }
+
+        const D = (b*b) - (4*a*c);
+        let x1, x2, info;
+
+        if(D > 0){
+            x1 = (-b + Math.sqrt(D)) / (2*a);
+            x2 = (-b - Math.sqrt(D)) / (2*a);
+            info = "Two Real & Distinct Roots";
+            x1 = x1.toFixed(2);
+            x2 = x2.toFixed(2);
+        }
+        else if(D === 0){
+            x1 = x2 = (-b / (2*a)).toFixed(2);
+            info = "One Real & Repeated Root";
+        }
+        else{
+            const real = (-b / (2*a)).toFixed(2);
+            const imag = (Math.sqrt(-D) / (2*a)).toFixed(2);
+            x1 = `${real} + ${imag}i`;
+            x2 = `${real} - ${imag}i`;
+            info = "Two Complex Roots";
+        }
+
+        root1El.textContent = x1;
+        root2El.textContent = x2;
+        rootInfoEl.textContent = info;
+        resultBox.style.display = 'block';
+
+        // History API
+        if(typeof saveCalculation === "function"){
+            saveCalculation(
+                "Quadratic Solver",
+                `${a}x² + ${b}x + ${c} = 0`,
+                `Roots: ${x1}, ${x2}`
+            );
+        }
+    }
+
+    function showError(msg){
+        tip.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> ${msg}`;
+        tip.style.color = "#ef4444";
+    }
+
+    // Modal Logic
+    helpBtn.onclick = () => helpPanel.style.display = 'flex';
+    closeHelpBtn.onclick = () => helpPanel.style.display = 'none';
+    helpPanel.onclick = (e) => { if(e.target === helpPanel) helpPanel.style.display = 'none'; };
+});
+</script>
+</body>
+</html>

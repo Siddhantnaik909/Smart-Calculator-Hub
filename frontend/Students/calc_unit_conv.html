@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Unit Converter</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i>
+                SMART HUB
+            </div>
+            <nav class="side-menu">
+                <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+                <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+                <a href="../history.html"><i class="fa fa-history"></i> History</a>
+                <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+                <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+            </nav>
+            <div class="sidebar-footer"><p>© 2025 Smart Hub Products.</p></div>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Unit Converter</h1>
+            </header>
+
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1">
+                        <h3>Convert</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>Category</span>
+                                <select id="category" class="form-control">
+                                    <option value="Length">Length</option>
+                                    <option value="Weight">Weight</option>
+                                    <option value="Temperature">Temperature</option>
+                                    <option value="Volume">Volume</option>
+                                    <option value="Speed">Speed</option>
+                                </select>
+                            </div>
+                            
+                            <div class="sub-link">
+                                <input type="number" id="fromValue" class="form-control" placeholder="1">
+                                <select id="fromUnit" class="form-control" style="width: 40%;"></select>
+                            </div>
+
+                            <button class="sub-link" onclick="swapUnits()" style="justify-content: center; color: var(--primary-color);">
+                                <i class="fa fa-arrow-right-arrow-left"></i> Swap
+                            </button>
+
+                            <div class="sub-link">
+                                <input type="number" id="toValue" class="form-control" readonly>
+                                <select id="toUnit" class="form-control" style="width: 40%;"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cat-card stagger-2">
+                        <h3><i class="fa-solid fa-ruler" style="color: var(--accent-cyan);"></i> Quick Facts</h3>
+                        <div style="font-size: 0.9rem; color: var(--text-body); line-height: 1.6;">
+                            <p><strong>Metric System:</strong> Based on powers of 10 (Meters, Grams, Liters). Used globally.</p>
+                            <p><strong>Imperial System:</strong> Uses Feet, Pounds, Gallons. Primarily used in the USA.</p>
+                            <p><strong>Temperature:</strong> Celsius is relative to water freezing (0°C). Kelvin is absolute (0K = no heat energy).</p>
+                        </div>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>SMART HUB | All Rights Reserved © 2025</p></footer>
+            </div>
+        </main>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const units = {
+            Length: { 'Meters': 1, 'Kilometers': 1000, 'Centimeters': 0.01, 'Millimeters': 0.001, 'Miles': 1609.34, 'Yards': 0.9144, 'Feet': 0.3048, 'Inches': 0.0254 },
+            Weight: { 'Kilograms': 1, 'Grams': 0.001, 'Milligrams': 0.000001, 'Pounds': 0.453592, 'Ounces': 0.0283495, 'Tonnes': 1000 },
+            Volume: { 'Liters': 1, 'Milliliters': 0.001, 'Gallons (US)': 3.78541, 'Quarts': 0.946353, 'Pints': 0.473176, 'Cups': 0.236588 },
+            Speed: { 'm/s': 1, 'km/h': 0.277778, 'mph': 0.44704, 'Knots': 0.514444 },
+            Temperature: { 'Celsius': 'C', 'Fahrenheit': 'F', 'Kelvin': 'K' } // Handled separately
+        };
+
+        const categorySelect = document.getElementById('category');
+        const fromUnitSelect = document.getElementById('fromUnit');
+        const toUnitSelect = document.getElementById('toUnit');
+        const fromValueInput = document.getElementById('fromValue');
+        const toValueEl = document.getElementById('toValue');
+
+        function populateUnits() {
+            const cat = categorySelect.value;
+            const unitKeys = Object.keys(units[cat]);
+            
+            fromUnitSelect.innerHTML = '';
+            toUnitSelect.innerHTML = '';
+
+            unitKeys.forEach(u => {
+                fromUnitSelect.add(new Option(u, u));
+                toUnitSelect.add(new Option(u, u));
+            });
+
+            // Set different default to
+            if(unitKeys.length > 1) toUnitSelect.selectedIndex = 1;
+            convert();
+        }
+
+        function convert() {
+            const category = categorySelect.value;
+            const fromUnit = fromUnitSelect.value;
+            const toUnit = toUnitSelect.value;
+            const fromValue = parseFloat(fromValueInput.value);
+
+            if (isNaN(fromValue)) { toValueEl.value = ''; return; }
+
+            let result;
+
+            if (category === 'Temperature') {
+                let celsius;
+                if (fromUnit === 'Celsius') celsius = fromValue;
+                if (fromUnit === 'Fahrenheit') celsius = (fromValue - 32) * 5 / 9;
+                if (fromUnit === 'Kelvin') celsius = fromValue - 273.15;
+                
+                if (toUnit === 'Celsius') result = celsius;
+                if (toUnit === 'Fahrenheit') result = (celsius * 9 / 5) + 32;
+                if (toUnit === 'Kelvin') result = celsius + 273.15;
+            } else {
+                const unitData = units[category];
+                const baseValue = fromValue * unitData[fromUnit];
+                result = baseValue / unitData[toUnit];
+            }
+            
+            toValueEl.value = result.toFixed(4).replace(/\.0000$/, '');
+
+            // SAVE TO HISTORY (Debounced logic implied, but direct here for simplicity)
+            // Ideally use a timeout like in Programmer Calc
+            // Here, we just save on 'change' events or explicit triggers, but let's leave it for manual trigger or focus out if needed.
+            // For now, let's only save when user leaves the input field to prevent spam
+        }
+        
+        // Save history on blur (focus lost)
+        fromValueInput.addEventListener('blur', () => {
+            const val = fromValueInput.value;
+            if(val) {
+                saveCalculation('Unit Converter', `${val} ${fromUnitSelect.value}`, `${toValueEl.value} ${toUnitSelect.value}`);
+            }
+        });
+
+        window.swapUnits = () => {
+            const temp = fromUnitSelect.value;
+            fromUnitSelect.value = toUnitSelect.value;
+            toUnitSelect.value = temp;
+            convert();
+        }
+
+        categorySelect.addEventListener('change', populateUnits);
+        fromValueInput.addEventListener('input', convert);
+        fromUnitSelect.addEventListener('change', convert);
+        toUnitSelect.addEventListener('change', convert);
+
+        populateUnits();
+    });
+    </script>
+</body>
+</html>

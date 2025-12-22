@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Study Timer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i>
+                SMART HUB
+            </div>
+            <nav class="side-menu">
+                <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+                <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+                <a href="../history.html"><i class="fa fa-history"></i> History</a>
+                <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+                <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+            </nav>
+            <div class="sidebar-footer"><p>© 2025 Smart Hub Products.</p></div>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Pomodoro Timer</h1>
+            </header>
+
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1" style="text-align: center;">
+                        <h2 id="timerDisplay" style="font-size: 5rem; font-weight: 800; color: var(--primary-color); margin: 20px 0; font-feature-settings: 'tnum'; font-variant-numeric: tabular-nums;">25:00</h2>
+                        
+                        <div id="statusTip" style="color:var(--text-muted); margin-bottom:20px; font-size:0.9rem;">Ready to focus?</div>
+
+                        <div class="sub-cat-list" style="flex-direction: row; justify-content: center; gap: 10px;">
+                            <button id="startBtn" onclick="toggleTimer()" class="sub-link" style="justify-content: center; background-color: var(--primary-color); color: white; width: 120px; transition: background 0.3s;">
+                                <i class="fa fa-play"></i> &nbsp; Start
+                            </button>
+                            <button onclick="resetTimer()" class="sub-link" style="justify-content: center; background-color: #ef4444; color: white; width: 120px;">
+                                <i class="fa fa-rotate-left"></i> &nbsp; Reset
+                            </button>
+                        </div>
+
+                        <div class="sub-cat-list" style="margin-top: 25px;">
+                            <p style="margin-bottom: 10px; font-weight: 600; font-size:0.9rem; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted);">Quick Modes</p>
+                            <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+                                <button onclick="setMode(25)" class="sub-link" style="width: auto; padding: 8px 15px; border:1px solid var(--border-color);">25m Focus</button>
+                                <button onclick="setMode(5)" class="sub-link" style="width: auto; padding: 8px 15px; border:1px solid var(--border-color);">5m Break</button>
+                                <button onclick="setMode(15)" class="sub-link" style="width: auto; padding: 8px 15px; border:1px solid var(--border-color);">15m Long Break</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cat-card stagger-2">
+                        <h3>Custom Timer</h3>
+                        <div class="sub-cat-list" style="flex-direction: row; gap: 10px;">
+                            <input type="number" id="customMinutes" class="form-control" placeholder="Mins" min="1" max="180" style="width: 100px;">
+                            <button onclick="setCustomTime()" class="sub-link" style="width: auto; background-color: var(--text-header); color: white;">Set Time</button>
+                        </div>
+                    </div>
+
+                    <div class="cat-card stagger-3">
+                        <h3><i class="fa-solid fa-hourglass-half" style="color: #f59e0b;"></i> The Pomodoro Technique</h3>
+                        
+                        
+
+                        <div style="font-size: 0.9rem; color: var(--text-body); line-height: 1.6; margin-top:15px;">
+                            <p style="margin-bottom: 8px;"><strong>What:</strong> A productivity method where you work for 25 minutes, then take a 5-minute break.</p>
+                            <p style="margin-bottom: 8px;"><strong>Why:</strong> Breaks mental fatigue and maintains high focus.</p>
+                            
+                            <div style="background: rgba(245, 158, 11, 0.1); padding: 15px; border-radius: 8px; border-left: 4px solid #f59e0b; margin-top:10px;">
+                                <strong>💡 Smart Tip:</strong> Use the <strong>Spacebar</strong> to Start/Pause and <strong>'R'</strong> key to Reset quickly.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>SMART HUB | All Rights Reserved © 2025</p></footer>
+            </div>
+        </main>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+    let timer;
+    let isRunning = false;
+    let timeLeft = 25 * 60;
+    let initialTime = 25;
+    let streak = 0;
+
+    const display = document.getElementById('timerDisplay');
+    const startBtn = document.getElementById('startBtn');
+    const statusTip = document.getElementById('statusTip');
+    const alarm = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg'); 
+
+    // Request Notification Permission on load
+    if ("Notification" in window && Notification.permission !== "granted") {
+        Notification.requestPermission();
+    }
+
+    function updateDisplay() {
+        const m = Math.floor(timeLeft / 60);
+        const s = timeLeft % 60;
+        const timeString = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        display.innerText = timeString;
+        document.title = `${timeString} - Pomodoro`; // Update tab title
+    }
+
+    function toggleTimer() {
+        if (isRunning) {
+            clearInterval(timer);
+            startBtn.innerHTML = '<i class="fa fa-play"></i> &nbsp; Resume';
+            startBtn.style.backgroundColor = "var(--primary-color)";
+            statusTip.innerText = "Timer Paused";
+        } else {
+            timer = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    updateDisplay();
+                } else {
+                    completeSession();
+                }
+            }, 1000);
+            startBtn.innerHTML = '<i class="fa fa-pause"></i> &nbsp; Pause';
+            startBtn.style.backgroundColor = "#eab308"; 
+            statusTip.innerText = "Stay Focused...";
+        }
+        isRunning = !isRunning;
+    }
+
+    function completeSession() {
+        clearInterval(timer);
+        alarm.play();
+        isRunning = false;
+        streak++;
+
+        // Save History FIRST (before alert blocks UI)
+        if (typeof saveCalculation === 'function') {
+            saveCalculation('Pomodoro', `${initialTime} min session`, `Completed (Streak: ${streak})`);
+        }
+
+        // Send Notification
+        if (Notification.permission === "granted") {
+            new Notification("Time's Up!", { body: "Great job! Take a break." });
+        }
+
+        // Vibrate if supported
+        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+
+        // UI Reset
+        alert("Time's Up! Session Completed.");
+        resetTimer(false); // Reset without clearing streak
+    }
+
+    function resetTimer(fullReset = true) {
+        clearInterval(timer);
+        isRunning = false;
+        
+        if (fullReset) {
+            timeLeft = 25 * 60;
+            initialTime = 25;
+            streak = 0;
+            statusTip.innerText = "Ready to start?";
+        } else {
+            // Just reset the clock to the last selected time
+            timeLeft = initialTime * 60;
+            statusTip.innerText = "Session finished. Start again?";
+        }
+        
+        updateDisplay();
+        startBtn.innerHTML = '<i class="fa fa-play"></i> &nbsp; Start';
+        startBtn.style.backgroundColor = "var(--primary-color)";
+        
+        alarm.pause();
+        alarm.currentTime = 0;
+        document.title = "SMART HUB | Study Timer";
+    }
+
+    function setMode(minutes) {
+        clearInterval(timer);
+        isRunning = false;
+        timeLeft = minutes * 60;
+        initialTime = minutes;
+        updateDisplay();
+        
+        startBtn.innerHTML = '<i class="fa fa-play"></i> &nbsp; Start';
+        startBtn.style.backgroundColor = "var(--primary-color)";
+        statusTip.innerText = `${minutes} Minutes Set`;
+    }
+
+    function setCustomTime() {
+        const input = document.getElementById('customMinutes');
+        const mins = parseInt(input.value);
+
+        if (isNaN(mins) || mins <= 0 || mins > 180) {
+            alert("Please enter a time between 1 and 180 minutes.");
+            return;
+        }
+
+        setMode(mins);
+        input.value = ''; 
+    }
+
+    // Keyboard Shortcuts
+    document.addEventListener('keydown', (e) => {
+        if (e.code === 'Space') {
+            e.preventDefault(); // Prevent scrolling
+            toggleTimer();
+        }
+        if (e.key.toLowerCase() === 'r') {
+            resetTimer();
+        }
+    });
+    </script>
+</body>
+</html>

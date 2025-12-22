@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Fuel Cost Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<div class="dashboard-layout" id="dashboard-wrapper">
+    <div class="overlay" id="mobile-overlay"></div>
+
+    <aside class="sidebar">
+        <div class="brand-block">
+            <i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i>
+            SMART HUB
+        </div>
+        <nav class="side-menu">
+            <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+            <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+            <a href="../history.html"><i class="fa fa-history"></i> History</a>
+            <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+            <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+        </nav>
+        <div class="sidebar-footer"><p>© 2024 Smart Hub Products.</p></div>
+    </aside>
+
+    <main class="main-content">
+        <header class="content-header">
+            <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+            <h1 class="fade-in">Fuel Cost Calculator</h1>
+        </header>
+
+        <div class="page-body">
+            <section class="container grid-section fade-in delay-1">
+                <div class="cat-card stagger-1">
+                    <h3>Trip Details</h3>
+                    <div class="sub-cat-list">
+                        <div class="sub-link">
+                            <span>Currency</span>
+                            <select id="currency" class="form-control">
+                                <option value="$">USD ($)</option>
+                                <option value="₹">INR (₹)</option>
+                                <option value="€">EUR (€)</option>
+                                <option value="£">GBP (£)</option>
+                            </select>
+                        </div>
+                        <div class="sub-link">
+                            <span>Trip Distance</span>
+                            <input type="number" id="distance" class="form-control" placeholder="e.g. 500" min="0">
+                        </div>
+                        <div class="sub-link">
+                            <span>Fuel Efficiency</span>
+                            <input type="number" id="efficiency" class="form-control" placeholder="e.g. 15 (km/L or MPG)" min="0">
+                        </div>
+                        <div class="sub-link">
+                            <span>Price per Unit</span>
+                            <input type="number" id="price" class="form-control" placeholder="e.g. 105.50" min="0">
+                        </div>
+                        <button class="sub-link" onclick="calculateFuel()" style="background-color: var(--primary-color); color: var(--text-white);">
+                            Calculate Cost <i class="fa-solid fa-arrow-right arrow"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="resultBox" class="cat-card stagger-2" style="display: none;">
+                    <h3>Results</h3>
+                    <div class="sub-cat-list">
+                        <div class="sub-link">
+                            <span>Fuel Needed</span>
+                            <span id="resFuel" style="font-weight: 600;">0.00 units</span>
+                        </div>
+                        <div class="sub-link" style="border-bottom: none; background-color: var(--bg-main);">
+                            <span>Total Trip Cost</span>
+                            <span id="resCost" style="font-size: 1.5rem; font-weight: 700; color: var(--primary-color);">0.00</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <footer class="content-footer"><p>SMART HUB | All Rights Reserved © 2025</p></footer>
+        </div>
+    </main>
+</div>
+
+<script src="../script.js"></script>
+<script>
+    function calculateFuel() {
+        const distanceInput = document.getElementById('distance');
+        const efficiencyInput = document.getElementById('efficiency');
+        const priceInput = document.getElementById('price');
+        const currencySelect = document.getElementById('currency');
+
+        const distance = parseFloat(distanceInput.value);
+        const efficiency = parseFloat(efficiencyInput.value);
+        const price = parseFloat(priceInput.value);
+        const symbol = currencySelect.value;
+
+        // Validation
+        if (!distance) { alert("Please enter distance."); distanceInput.focus(); return; }
+        if (!efficiency) { alert("Please enter efficiency."); efficiencyInput.focus(); return; }
+        if (!price) { alert("Please enter price."); priceInput.focus(); return; }
+
+        if (efficiency <= 0) {
+             alert("Efficiency must be greater than 0.");
+             efficiencyInput.focus();
+             return;
+        }
+
+        const fuelNeeded = distance / efficiency;
+        const totalCost = fuelNeeded * price;
+
+        document.getElementById('resFuel').innerText = fuelNeeded.toFixed(2) + " units";
+        document.getElementById('resCost').innerText = `${symbol}${totalCost.toFixed(2)}`;
+
+        document.getElementById('resultBox').style.display = 'block';
+
+        // --- SAVE TO HISTORY (FIXED) ---
+        saveCalculation('Fuel Calc', `Dist: ${distance}, Eff: ${efficiency}`, `Cost: ${symbol}${totalCost.toFixed(2)}`);
+    }
+
+    // Auto-recalculate when currency changes
+    document.getElementById('currency').addEventListener('change', () => {
+        if(document.getElementById('resultBox').style.display === 'block') {
+            calculateFuel();
+        }
+    });
+</script>
+</body>
+</html>

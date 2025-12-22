@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SMART HUB | GPA Calculator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+<div class="dashboard-layout" id="dashboard-wrapper">
+
+    <aside class="sidebar">
+        <div class="brand-block">
+            <i class="fa-solid fa-microchip" style="color:var(--primary-color);margin-right:10px"></i>
+            SMART HUB
+        </div>
+        <nav class="side-menu">
+            <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+            <a href="../calculators.html" class="active"><i class="fa fa-calculator"></i> Calculators</a>
+            <a href="../history.html"><i class="fa fa-history"></i> History</a>
+            <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+            <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="content-header">
+            <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+            <h1>GPA Calculator</h1>
+        </header>
+
+        <section class="container grid-section">
+
+            <div class="cat-card stagger-1">
+                <h3>Course Details</h3>
+
+                <div class="sub-link">
+                    <span>Grading System</span>
+                    <select id="gradingSystem" class="form-control">
+                        <option value="10">10.0 Scale (O, A+, A...)</option>
+                        <option value="4">4.0 Scale (A, B, C...)</option>
+                    </select>
+                </div>
+
+                <div id="coursesContainer" style="margin-bottom: 15px;"></div>
+
+                <div id="tip" style="font-size:0.9rem; margin-top:8px; color:var(--text-muted); min-height:20px;">
+                    <i class="fa-solid fa-lightbulb" style="color:#eab308"></i> Tip: Enter credits for accurate weighting.
+                </div>
+
+                <div style="display:flex; gap:10px; margin-top:15px;">
+                    <button id="addCourseBtn" class="sub-link" style="flex:1; justify-content:center; border:dashed 2px var(--primary-color); color:var(--primary-color); background:transparent;">
+                        <i class="fa fa-plus"></i> Add Row
+                    </button>
+                    <button id="helpBtn" class="sub-link" style="width:auto; padding:0 15px;">
+                        <i class="fa fa-question"></i>
+                    </button>
+                </div>
+
+                <button id="calculateBtn" class="sub-link" style="margin-top:10px; justify-content:center; background-color:var(--primary-color); color:white;">
+                    Calculate GPA
+                </button>
+            </div>
+
+            <div class="cat-card stagger-2" id="resultBox" style="display:none; text-align:center;">
+                <h3>Your GPA</h3>
+                <div style="font-size:3.5rem; font-weight:800; color:var(--primary-color); line-height:1.2;" id="gpaDisplay">0.00</div>
+                <p style="color:var(--text-muted); font-size:0.9rem;">Cumulative Grade Point Average</p>
+            </div>
+
+            <div class="cat-card stagger-3">
+                <h3><i class="fa-solid fa-list-ol" style="color:var(--accent-cyan)"></i> Calculation Steps</h3>
+                <div id="stepsDisplay" style="font-size:0.9rem; color:var(--text-body); line-height:1.6;">
+                    Run calculation to see details.
+                </div>
+            </div>
+
+        </section>
+
+        <footer class="content-footer">SMART HUB | All Rights Reserved © 2025</footer>
+    </main>
+</div>
+
+<div id="helpPanel" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:var(--bg-card); width:90%; max-width:500px; padding:25px; border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,0.2); animation: fadeIn 0.3s;">
+        <h3 style="margin-top:0; color:var(--primary-color);">How is GPA Calculated?</h3>
+        
+        
+
+        <p>Your GPA is a weighted average based on the credits of each course.</p>
+        <p style="background:var(--bg-main); padding:10px; border-radius:6px; font-family:monospace;">GPA = (Total Quality Points) ÷ (Total Credits)</p>
+        
+        <ul style="padding-left:20px; color:var(--text-body); font-size:0.9rem;">
+            <li><strong>Quality Points:</strong> Grade Value × Course Credits</li>
+            <li><strong>Total Credits:</strong> Sum of all credit hours attempted.</li>
+        </ul>
+
+        <button id="closeHelpBtn" class="sub-link" style="margin-top:15px; justify-content:center; background-color:var(--text-header); color:white;">Close</button>
+    </div>
+</div>
+
+<script src="../script.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // DOM Elements
+    const coursesDiv = document.getElementById('coursesContainer');
+    const gradingSelect = document.getElementById('gradingSystem');
+    const gpaDisplay = document.getElementById('gpaDisplay');
+    const stepsDisplay = document.getElementById('stepsDisplay');
+    const tipEl = document.getElementById('tip');
+    const resultBox = document.getElementById('resultBox');
+    
+    // Buttons
+    const addBtn = document.getElementById('addCourseBtn');
+    const calcBtn = document.getElementById('calculateBtn');
+    const helpBtn = document.getElementById('helpBtn');
+    const closeHelpBtn = document.getElementById('closeHelpBtn');
+    const helpPanel = document.getElementById('helpPanel');
+
+    // --- LOGIC ---
+
+    function addCourseRow() {
+        const row = document.createElement('div');
+        row.className = 'sub-link fade-in';
+        row.style.gap = '8px';
+        row.style.padding = '8px';
+        row.innerHTML = `
+            <input type="text" class="form-control name" placeholder="Subject (Optional)" style="flex:2;">
+            <select class="form-control grade" style="flex:1.5;"></select>
+            <input type="number" class="form-control credits" placeholder="Cred" min="1" max="20" style="flex:1;">
+            <button class="remove-btn" style="color:#ef4444; background:transparent; border:none; font-size:1.1rem; cursor:pointer; padding:0 5px;">
+                <i class="fa fa-times-circle"></i>
+            </button>
+        `;
+        
+        // Remove functionality
+        row.querySelector('.remove-btn').onclick = function() {
+            row.remove();
+        };
+
+        coursesDiv.appendChild(row);
+        populateGrades(row.querySelector('.grade'));
+    }
+
+    function populateGrades(selectEl) {
+        const scale = gradingSelect.value;
+        selectEl.innerHTML = ''; // Clear existing
+        
+        let options = [];
+        if(scale === '10') {
+            // Indian 10-point scale
+            options = [
+                {t:'O (10)', v:10}, {t:'A+ (9)', v:9}, {t:'A (8)', v:8}, 
+                {t:'B+ (7)', v:7}, {t:'B (6)', v:6}, {t:'C (5)', v:5}, 
+                {t:'P (4)', v:4}, {t:'F (0)', v:0}
+            ];
+        } else {
+            // US 4.0 scale
+            options = [
+                {t:'A (4.0)', v:4.0}, {t:'A- (3.7)', v:3.7}, 
+                {t:'B+ (3.3)', v:3.3}, {t:'B (3.0)', v:3.0}, 
+                {t:'B- (2.7)', v:2.7}, {t:'C+ (2.3)', v:2.3}, 
+                {t:'C (2.0)', v:2.0}, {t:'D (1.0)', v:1.0}, {t:'F (0.0)', v:0.0}
+            ];
+        }
+
+        options.forEach(opt => {
+            selectEl.add(new Option(opt.t, opt.v));
+        });
+    }
+
+    // Update all dropdowns when system changes
+    gradingSelect.addEventListener('change', () => {
+        document.querySelectorAll('.grade').forEach(sel => populateGrades(sel));
+    });
+
+    // Calculation Logic
+    calcBtn.onclick = () => {
+        let totalPoints = 0;
+        let totalCredits = 0;
+        let stepLog = '';
+        let isValid = true;
+        let hasData = false;
+
+        // Reset UI
+        tipEl.innerHTML = '<i class="fa-solid fa-lightbulb" style="color:#eab308"></i> Tip: Enter credits for accurate weighting.';
+        tipEl.style.color = 'var(--text-muted)';
+
+        const rows = document.querySelectorAll('#coursesContainer .sub-link');
+        
+        rows.forEach((row, index) => {
+            const gradeVal = parseFloat(row.querySelector('.grade').value);
+            const creditsVal = parseFloat(row.querySelector('.credits').value);
+            const subjectName = row.querySelector('.name').value || `Course ${index + 1}`;
+
+            if (isNaN(creditsVal) || creditsVal <= 0) {
+                // Skip empty/invalid rows but flag if user tried to calculate nothing
+                return; 
+            }
+
+            hasData = true;
+            const qualityPoints = gradeVal * creditsVal;
+            
+            totalPoints += qualityPoints;
+            totalCredits += creditsVal;
+
+            stepLog += `<div style="border-bottom:1px solid var(--border-color); padding:5px 0;">
+                <strong>${subjectName}:</strong> ${creditsVal} credits × ${gradeVal} pts = <span>${qualityPoints.toFixed(1)}</span>
+            </div>`;
+        });
+
+        if (!hasData) {
+            tipEl.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> Error: Please enter valid credits (e.g., 3, 4) for at least one course.';
+            tipEl.style.color = '#ef4444';
+            return;
+        }
+
+        const finalGPA = (totalPoints / totalCredits).toFixed(2);
+        
+        gpaDisplay.innerText = finalGPA;
+        stepsDisplay.innerHTML = stepLog + `
+            <div style="margin-top:10px; padding-top:10px; font-weight:bold; color:var(--primary-color);">
+                Total Points (${totalPoints}) ÷ Total Credits (${totalCredits}) = ${finalGPA}
+            </div>`;
+        
+        resultBox.style.display = 'block';
+
+        // History API Integration
+        if (typeof saveCalculation === 'function') {
+            saveCalculation('GPA Calc', `${totalCredits} Credits Attempted`, `GPA: ${finalGPA}`);
+        }
+    };
+
+    // Modal Logic
+    helpBtn.onclick = () => { helpPanel.style.display = 'flex'; };
+    closeHelpBtn.onclick = () => { helpPanel.style.display = 'none'; };
+    helpPanel.onclick = (e) => { if(e.target === helpPanel) helpPanel.style.display = 'none'; };
+
+    // Initialize with 3 rows
+    addBtn.onclick = addCourseRow;
+    addCourseRow();
+    addCourseRow();
+    addCourseRow();
+});
+</script>
+</body>
+</html>

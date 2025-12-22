@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | BMI Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i>
+                SMART HUB
+            </div>
+            <nav class="side-menu">
+                <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+                <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+                <a href="../history.html"><i class="fa fa-history"></i> History</a>
+                <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+                <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+            </nav>
+            <div class="sidebar-footer"><p>© 2025 Smart Hub Products.</p></div>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">BMI Calculator</h1>
+            </header>
+
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1">
+                        <h3>Your Measurements</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>Height (cm)</span>
+                                <input type="number" id="height" class="form-control" placeholder="e.g. 175" min="0">
+                            </div>
+                            <div class="sub-link">
+                                <span>Weight (kg)</span>
+                                <input type="number" id="weight" class="form-control" placeholder="e.g. 70" min="0">
+                            </div>
+                            <button id="calculateBtn" class="sub-link" style="justify-content: center; background-color: var(--primary-color); color: white;">Calculate BMI</button>
+                        </div>
+                    </div>
+
+                    <div id="resultBox" class="cat-card stagger-2" style="display: none;">
+                        <h3>Your Result</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link" style="flex-direction: column; align-items: center; background-color: var(--bg-main);">
+                                <span id="bmiValue" style="font-size: 2.5rem; font-weight: 800;">0.0</span>
+                                <span id="bmiCategory" style="font-weight: 600; font-size: 1.1rem;">Normal</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cat-card stagger-3">
+                        <h3><i class="fa-solid fa-circle-info" style="color: var(--primary-color);"></i> About BMI</h3>
+                        <div style="font-size: 0.9rem; color: var(--text-body); line-height: 1.6;">
+                            <p style="margin-bottom: 8px;"><strong>What:</strong> Body Mass Index (BMI) is a screening tool that estimates body fat based on your height and weight.</p>
+                            <p style="margin-bottom: 8px;"><strong>Why:</strong> It helps identify if you are at a healthy weight, underweight, or overweight, which can indicate potential health risks.</p>
+                            <p style="margin-bottom: 15px;"><strong>How:</strong> The formula is: <code>Weight (kg) / Height (m)²</code>.</p>
+                            
+                            <div style="background: rgba(99, 102, 241, 0.1); padding: 15px; border-radius: 8px; border-left: 4px solid var(--primary-color);">
+                                <strong>💡 Smart Tip:</strong> Muscle weighs more than fat. If you are an athlete, BMI might overestimate body fat. Use Body Fat % for better accuracy.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>SMART HUB | All Rights Reserved © 2025</p></footer>
+            </div>
+        </main>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const calculateBtn = document.getElementById('calculateBtn');
+        const resultBox = document.getElementById('resultBox');
+        const heightInput = document.getElementById('height');
+        const weightInput = document.getElementById('weight');
+        const bmiValueEl = document.getElementById('bmiValue');
+        const bmiCategoryEl = document.getElementById('bmiCategory');
+
+        const calculateBMI = () => {
+            const height = parseFloat(heightInput.value);
+            const weight = parseFloat(weightInput.value);
+
+            if (isNaN(height) || isNaN(weight) || height <= 0 || weight <= 0) {
+                alert("Please enter valid positive numbers for height and weight.");
+                return;
+            }
+
+            const bmi = weight / ((height / 100) ** 2);
+            let category = '', color = '';
+
+            if (bmi < 18.5) {
+                category = 'Underweight'; color = '#3b82f6'; // Blue
+            } else if (bmi < 24.9) {
+                category = 'Normal weight'; color = '#10b981'; // Green
+            } else if (bmi < 29.9) {
+                category = 'Overweight'; color = '#f59e0b'; // Yellow
+            } else {
+                category = 'Obese'; color = '#ef4444'; // Red
+            }
+
+            bmiValueEl.innerText = bmi.toFixed(1);
+            bmiCategoryEl.innerText = category;
+            bmiValueEl.style.color = color;
+            bmiCategoryEl.style.color = color;
+            
+            resultBox.style.display = 'block';
+
+            // SAVE TO HISTORY
+            saveCalculation('BMI Calc', `H: ${height}cm, W: ${weight}kg`, `BMI: ${bmi.toFixed(1)} (${category})`);
+        };
+
+        calculateBtn.addEventListener('click', calculateBMI);
+    });
+    </script>
+</body>
+</html>

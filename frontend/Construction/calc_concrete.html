@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Concrete Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i>
+                SMART HUB
+            </div>
+            <nav class="side-menu">
+                <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+                <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+                <a href="../history.html"><i class="fa fa-history"></i> History</a>
+                <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+                <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+            </nav>
+            <div class="sidebar-footer"><p>© 2024 Smart Hub Products.</p></div>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Concrete Calculator</h1>
+            </header>
+
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1" style="max-width: 600px; margin: 0 auto;">
+                        <h3>Slab/Footing Dimensions</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>Length (Feet)</span>
+                                <input type="number" id="length" class="form-control" placeholder="e.g., 10">
+                            </div>
+                            <div class="sub-link">
+                                <span>Width (Feet)</span>
+                                <input type="number" id="width" class="form-control" placeholder="e.g., 10">
+                            </div>
+                            <div class="sub-link">
+                                <span>Thickness (Inches)</span>
+                                <input type="number" id="thickness" class="form-control" placeholder="e.g., 4">
+                            </div>
+                            <button class="sub-link" onclick="calculateConcrete()" style="background-color: var(--primary-color); color: var(--text-white); justify-content: center;">
+                                Calculate <i class="fa-solid fa-arrow-right arrow" style="margin-left: 10px;"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="resultBox" class="cat-card stagger-2" style="display: none; margin-top: 20px; max-width: 600px; margin-left: auto; margin-right: auto; border: 1px solid var(--primary-color);">
+                        <h3 style="color: var(--primary-color);">Results</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>Volume (Cu. Feet):</span>
+                                <span id="resCuFt" style="font-weight: bold;">0</span>
+                            </div>
+                            <div class="sub-link">
+                                <span>Volume (Cu. Yards):</span>
+                                <span id="resCuYd" style="font-weight: bold;">0</span>
+                            </div>
+                            <div class="sub-link">
+                                <span>Est. 80lb Bags:</span>
+                                <span id="resBags80" style="font-weight: bold;">0</span>
+                            </div>
+                            <div class="sub-link">
+                                <span>Est. 60lb Bags:</span>
+                                <span id="resBags60" style="font-weight: bold;">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>SMART HUB | All Rights Reserved © 2025</p></footer>
+            </div>
+        </main>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+        function calculateConcrete() {
+            const length = parseFloat(document.getElementById('length').value);
+            const width = parseFloat(document.getElementById('width').value);
+            const thickness = parseFloat(document.getElementById('thickness').value);
+
+            if (isNaN(length) || isNaN(width) || isNaN(thickness)) {
+                alert("Please enter valid numbers for all fields.");
+                return;
+            }
+
+            const thicknessFt = thickness / 12;
+            const cubicFeet = length * width * thicknessFt;
+            const cubicYards = cubicFeet / 27;
+            const bags80 = cubicFeet / 0.60;
+            const bags60 = cubicFeet / 0.45;
+
+            document.getElementById('resCuFt').innerText = cubicFeet.toFixed(2) + " ft³";
+            document.getElementById('resCuYd').innerText = cubicYards.toFixed(2) + " yd³";
+            document.getElementById('resBags80').innerText = Math.ceil(bags80) + " bags";
+            document.getElementById('resBags60').innerText = Math.ceil(bags60) + " bags";
+
+            document.getElementById('resultBox').style.display = 'block';
+
+            // --- SAVE TO HISTORY (FIXED) ---
+            saveCalculation('Concrete Calc', `Size: ${length}' x ${width}' x ${thickness}"`, `Vol: ${cubicYards.toFixed(2)} yd³`);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Time Adder</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i> SMART HUB
+            </div>
+            <nav class="side-menu">
+                <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+                <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+                <a href="../history.html"><i class="fa fa-history"></i> History</a>
+                <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+                <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+            </nav>
+            <div class="sidebar-footer"><p>© 2024 Smart Hub Products.</p></div>
+        </aside>
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Time Adder</h1>
+            </header>
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1">
+                        <h3>Enter Time Durations</h3>
+                        <div id="rowsContainer" class="sub-cat-list"></div>
+                        <button class="sub-link" onclick="addRow()" style="background: transparent; border: 1px dashed var(--primary-color); color: var(--primary-color); justify-content: center; margin-top: 15px;">
+                            <i class="fa fa-plus" style="margin-right: 8px;"></i> Add Row
+                        </button>
+                    </div>
+                    <div class="cat-card stagger-2">
+                        <h3>Actions</h3>
+                        <div class="sub-cat-list">
+                            <button class="sub-link" onclick="calculateTime()" style="background-color: var(--primary-color); color: var(--text-white); justify-content: center;">
+                                Calculate Total
+                            </button>
+                            <button class="sub-link" onclick="resetForm()" style="justify-content: center; color: var(--text-body);">Reset</button>
+                        </div>
+                    </div>
+                    <div id="resultBox" class="cat-card stagger-3" style="display: none;">
+                        <h3>Total Time</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link" style="justify-content: center; flex-direction: column; background-color: var(--bg-main);">
+                                <span id="totalTime" style="font-size: 2.5rem; font-weight: 800; color: var(--primary-color);">00:00:00</span>
+                                <span id="totalDecimal" style="color: var(--text-muted); font-size: 0.9rem; margin-top: 5px;">0 Hours</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>SMART HUB | All Rights Reserved © 2025</p></footer>
+            </div>
+        </main>
+    </div>
+    <script src="../script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => { addRow(); addRow(); });
+
+        function addRow() {
+            const container = document.getElementById('rowsContainer');
+            const div = document.createElement('div');
+            div.className = 'sub-link';
+            div.style.padding = "10px";
+            div.innerHTML = `
+                <div class="time-input" style="display: flex; gap: 10px; width: 100%; align-items: center;">
+                    <input type="number" placeholder="Hr" class="h-input form-control" min="0" style="padding: 10px;">
+                    <span style="font-weight: bold;">:</span>
+                    <input type="number" placeholder="Min" class="m-input form-control" min="0" max="59" style="padding: 10px;">
+                    <span style="font-weight: bold;">:</span>
+                    <input type="number" placeholder="Sec" class="s-input form-control" min="0" max="59" style="padding: 10px;">
+                    <button onclick="removeRow(this)" style="background: #fee2e2; color: #ef4444; border: none; width: 40px; height: 40px; border-radius: 8px; cursor: pointer; flex-shrink: 0;"><i class="fa fa-trash"></i></button>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        function removeRow(btn) {
+            const rows = document.querySelectorAll('.sub-link .time-input');
+            if (rows.length > 1) { btn.closest('.sub-link').remove(); } 
+            else { const inputs = btn.closest('.sub-link').querySelectorAll('input'); inputs.forEach(i => i.value = ''); }
+        }
+
+        function resetForm() {
+            document.getElementById('rowsContainer').innerHTML = '';
+            addRow(); addRow();
+            document.getElementById('resultBox').style.display = 'none';
+        }
+
+        function calculateTime() {
+            let totalSeconds = 0;
+            const rows = document.querySelectorAll('.time-input');
+            let rowCount = 0;
+
+            rows.forEach(row => {
+                const h = parseInt(row.querySelector('.h-input').value) || 0;
+                const m = parseInt(row.querySelector('.m-input').value) || 0;
+                const s = parseInt(row.querySelector('.s-input').value) || 0;
+                if(h+m+s > 0) rowCount++;
+                totalSeconds += (h * 3600) + (m * 60) + s;
+            });
+
+            const hours = Math.floor(totalSeconds / 3600);
+            const remainingSeconds = totalSeconds % 3600;
+            const minutes = Math.floor(remainingSeconds / 60);
+            const seconds = remainingSeconds % 60;
+
+            const hDisplay = hours; 
+            const mDisplay = minutes < 10 ? "0" + minutes : minutes;
+            const sDisplay = seconds < 10 ? "0" + seconds : seconds;
+
+            const finalTime = `${hDisplay}:${mDisplay}:${sDisplay}`;
+            document.getElementById('totalTime').innerText = finalTime;
+            document.getElementById('totalDecimal').innerText = `Total: ${hours} Hours, ${minutes} Minutes, ${seconds} Seconds`;
+            document.getElementById('resultBox').style.display = 'block';
+
+            saveCalculation('Time Adder', `Sum of ${rowCount} entries`, `Total: ${finalTime}`);
+        }
+    </script>
+</body>
+</html>

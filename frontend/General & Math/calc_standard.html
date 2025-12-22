@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Standard Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i>
+                SMART HUB
+            </div>
+            <nav class="side-menu">
+                <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+                <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+                <a href="../history.html"><i class="fa fa-history"></i> History</a>
+                <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+                <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+            </nav>
+            <div class="sidebar-footer"><p>© 2025 Smart Hub Products.</p></div>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Standard Calculator</h1>
+            </header>
+
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1" style="max-width: 420px; margin: auto;">
+                        <input type="text" id="display" readonly placeholder="0" class="form-control" style="height: 70px; text-align: right; font-size: 2.2rem; margin-bottom: 1rem;">
+                        <div class="calc-buttons" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px;">
+                            <button class="sub-link clear" id="clear" style="background-color: #e74c3c; color: white;">C</button>
+                            <button class="sub-link operator" data-char="/">÷</button>
+                            <button class="sub-link operator" data-char="*">×</button>
+                            <button class="sub-link" id="backspace"><i class="fa fa-delete-left"></i></button>
+                            
+                            <button class="sub-link" data-char="7">7</button>
+                            <button class="sub-link" data-char="8">8</button>
+                            <button class="sub-link" data-char="9">9</button>
+                            <button class="sub-link operator" data-char="-">-</button>
+
+                            <button class="sub-link" data-char="4">4</button>
+                            <button class="sub-link" data-char="5">5</button>
+                            <button class="sub-link" data-char="6">6</button>
+                            <button class="sub-link operator" data-char="+">+</button>
+
+                            <button class="sub-link" data-char="1">1</button>
+                            <button class="sub-link" data-char="2">2</button>
+                            <button class="sub-link" data-char="3">3</button>
+                            <button class="sub-link" data-char=".">.</button>
+                            
+                            <button class="sub-link" data-char="0">0</button>
+                            <button class="sub-link equal" id="equals" style="grid-column: span 2; background-color: var(--primary-color); color: white;">=</button>
+                        </div>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>SMART HUB | All Rights Reserved © 2025</p></footer>
+            </div>
+        </main>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const display = document.getElementById('display');
+            const buttons = document.querySelector('.calc-buttons');
+
+            const appendCharacter = (char) => {
+                if (display.value === "Error" || display.value === "Infinity") {
+                    display.value = "";
+                }
+                display.value += char;
+            };
+
+            const clearDisplay = () => {
+                display.value = "";
+            };
+            
+            const deleteChar = () => {
+                display.value = display.value.slice(0, -1);
+            };
+
+            const calculateResult = () => {
+                try {
+                    const original = display.value;
+                    const expression = display.value.replace(/×/g, '*').replace(/÷/g, '/');
+                    const calculate = new Function('return ' + expression);
+                    const result = calculate();
+
+                    let finalRes;
+                    if (!isFinite(result)) {
+                        finalRes = "Infinity";
+                    } else {
+                        finalRes = parseFloat(result.toPrecision(14));
+                    }
+                    display.value = finalRes;
+
+                    // Save to History
+                    saveCalculation('Standard', `Expr: ${original}`, `Result: ${finalRes}`);
+
+                } catch (e) {
+                    display.value = "Error";
+                }
+            };
+            
+            buttons.addEventListener('click', (event) => {
+                const target = event.target.closest('button');
+                if (!target) return;
+
+                const char = target.dataset.char;
+                
+                if (char) {
+                    appendCharacter(char);
+                } else if (target.id === 'clear') {
+                    clearDisplay();
+                } else if (target.id === 'backspace') {
+                    deleteChar();
+                } else if (target.id === 'equals') {
+                    calculateResult();
+                }
+            });
+            
+            document.addEventListener('keydown', (event) => {
+                const key = event.key;
+
+                if (/[0-9]/.test(key) || ['+', '-', '*', '/', '.'].includes(key)) {
+                    appendCharacter(key);
+                } else if (key === 'Enter' || key === '=') {
+                    event.preventDefault();
+                    calculateResult();
+                } else if (key === 'Backspace') {
+                    deleteChar();
+                } else if (key.toLowerCase() === 'c') {
+                    clearDisplay();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

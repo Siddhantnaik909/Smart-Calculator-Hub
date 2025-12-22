@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Flooring Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i>
+                SMART HUB
+            </div>
+            <nav class="side-menu">
+                <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+                <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+                <a href="../history.html"><i class="fa fa-history"></i> History</a>
+                <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+                <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+            </nav>
+            <div class="sidebar-footer">
+                 <p>© 2024 Smart Hub Products.</p>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Flooring Calculator</h1>
+            </header>
+
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1">
+                        <h3>Room Dimensions</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>Room Length (Feet)</span>
+                                <input type="number" id="roomLen" class="form-control" placeholder="e.g., 12">
+                            </div>
+                            <div class="sub-link">
+                                <span>Room Width (Feet)</span>
+                                <input type="number" id="roomWid" class="form-control" placeholder="e.g., 10">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cat-card stagger-2">
+                        <h3>Tile/Plank Dimensions</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>Tile Length (Inches)</span>
+                                <input type="number" id="tileLen" class="form-control" value="12">
+                            </div>
+                            <div class="sub-link">
+                                <span>Tile Width (Inches)</span>
+                                <input type="number" id="tileWid" class="form-control" value="12">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cat-card stagger-3">
+                        <h3>Settings</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>Waste/Overage (%)</span>
+                                <input type="number" id="waste" class="form-control" value="10">
+                            </div>
+                            <button class="sub-link" onclick="calculateFlooring()" style="background-color: var(--primary-color); color: var(--text-white);">Calculate <i class="fa-solid fa-arrow-right arrow"></i></button>
+                        </div>
+                    </div>
+
+                    <div id="resultBox" class="cat-card stagger-4" style="display: none;">
+                        <h3>Results</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>Room Area:</span>
+                                <span id="resArea">0 sq ft</span>
+                            </div>
+                            <div class="sub-link">
+                                <span>Total Area (w/ Waste):</span>
+                                <span id="resTotalArea">0 sq ft</span>
+                            </div>
+                            <div class="sub-link">
+                                <span>Total Tiles Needed:</span>
+                                <span id="resTiles">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>SMART HUB | All Rights Reserved © 2025</p></footer>
+            </div>
+        </main>
+    </div>
+    
+    <script src="../script.js"></script>
+    <script>
+        function calculateFlooring() {
+            const rL = parseFloat(document.getElementById('roomLen').value);
+            const rW = parseFloat(document.getElementById('roomWid').value);
+            const tL = parseFloat(document.getElementById('tileLen').value);
+            const tW = parseFloat(document.getElementById('tileWid').value);
+            const waste = parseFloat(document.getElementById('waste').value) || 0;
+
+            if (!rL || !rW || !tL || !tW) {
+                alert("Please fill in all dimensions.");
+                return;
+            }
+
+            const roomArea = rL * rW;
+            const wasteMultiplier = 1 + (waste / 100);
+            const totalAreaNeeded = roomArea * wasteMultiplier;
+            const tileAreaSqFt = (tL * tW) / 144;
+            const tilesNeeded = Math.ceil(totalAreaNeeded / tileAreaSqFt);
+
+            // Display Results
+            document.getElementById('resArea').innerText = roomArea.toFixed(2) + " sq ft";
+            document.getElementById('resTotalArea').innerText = totalAreaNeeded.toFixed(2) + " sq ft";
+            document.getElementById('resTiles').innerText = tilesNeeded + " pcs";
+
+            document.getElementById('resultBox').style.display = 'block';
+
+            // --- SAVE TO HISTORY (FIXED) ---
+            saveCalculation('Flooring Calc', `Room: ${rL}' x ${rW}'`, `Tiles: ${tilesNeeded} pcs`);
+        }
+    </script>
+</body>
+</html>

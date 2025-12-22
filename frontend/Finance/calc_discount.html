@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Discount Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i> SMART HUB
+            </div>
+            <nav class="side-menu">
+                <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+                <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+                <a href="../history.html"><i class="fa fa-history"></i> History</a>
+                <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+                <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+            </nav>
+            <div class="sidebar-footer"><p>© 2025 Smart Hub Products.</p></div>
+        </aside>
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Discount Calculator</h1>
+            </header>
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1">
+                        <h3>Sale Details</h3>
+                        <div class="sub-cat-list">
+                             <div class="sub-link">
+                                <span>Currency</span>
+                                <select id="currency" class="form-control">
+                                    <option value="$">USD ($)</option>
+                                    <option value="₹">INR (₹)</option>
+                                    <option value="€">EUR (€)</option>
+                                    <option value="£">GBP (£)</option>
+                                </select>
+                            </div>
+                            <div class="sub-link">
+                                <span>Original Price</span>
+                                <input type="number" id="price" class="form-control" placeholder="100.00" min="0">
+                            </div>
+                            <div class="sub-link">
+                                <span>Discount (%)</span>
+                                <input type="number" id="discount" class="form-control" placeholder="25" min="0" max="100">
+                            </div>
+                            <button id="calcBtn" class="sub-link" style="justify-content: center; background-color: var(--primary-color); color: white;">Calculate & Save</button>
+                        </div>
+                    </div>
+                    <div class="cat-card stagger-2">
+                        <h3>Final Price & Savings</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>Final Price</span>
+                                <span id="finalPrice" style="font-size: 1.5rem; font-weight: 600; color: var(--text-header);">0.00</span>
+                            </div>
+                            <div class="sub-link" style="background-color: var(--bg-main);">
+                                <span>You Saved</span>
+                                <span id="savedAmount" style="font-size: 1.5rem; font-weight: 600; color: var(--primary-color);">0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>© 2025 Smart Hub Products.</p></footer>
+            </div>
+        </main>
+    </div>
+    <script src="../script.js"></script> 
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const priceInput = document.getElementById('price');
+        const discountInput = document.getElementById('discount');
+        const finalPriceEl = document.getElementById('finalPrice');
+        const savedAmountEl = document.getElementById('savedAmount');
+        const currencySelect = document.getElementById('currency');
+        const calcBtn = document.getElementById('calcBtn');
+
+        function calculateDiscount(save = false) {
+            const price = parseFloat(priceInput.value) || 0;
+            const discount = parseFloat(discountInput.value) || 0;
+            const symbol = currencySelect.value;
+
+            if (price < 0 || discount < 0) return;
+            
+            const savedAmount = price * (discount / 100);
+            const finalPrice = price - savedAmount;
+
+            finalPriceEl.textContent = `${symbol}${finalPrice.toFixed(2)}`;
+            savedAmountEl.textContent = `${symbol}${savedAmount.toFixed(2)}`;
+
+            if(save && price > 0) {
+                saveCalculation('Discount', `Price: ${price}, Off: ${discount}%`, `Final: ${symbol}${finalPrice.toFixed(2)}`);
+            }
+        }
+
+        priceInput.addEventListener('input', () => calculateDiscount(false));
+        discountInput.addEventListener('input', () => calculateDiscount(false));
+        currencySelect.addEventListener('change', () => calculateDiscount(false));
+        calcBtn.addEventListener('click', () => calculateDiscount(true));
+    });
+    </script>
+</body>
+</html>

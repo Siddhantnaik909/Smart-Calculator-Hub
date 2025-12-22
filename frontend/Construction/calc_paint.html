@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Paint Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i> SMART HUB
+            </div>
+            <nav class="side-menu">
+                <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+                <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+                <a href="../history.html"><i class="fa fa-history"></i> History</a>
+                <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+                <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+            </nav>
+            <div class="sidebar-footer"><p>© 2024 Smart Hub Products.</p></div>
+        </aside>
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Paint Calculator</h1>
+            </header>
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1">
+                        <h3>Wall Dimensions</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>Wall Height (Feet)</span>
+                                <input type="number" id="wallHeight" class="form-control" placeholder="e.g., 8">
+                            </div>
+                            <div class="sub-link">
+                                <span>Total Wall Width (Feet)</span>
+                                <input type="number" id="wallPerimeter" class="form-control" placeholder="e.g., 40">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cat-card stagger-2">
+                        <h3>Deductions & Coats</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>Number of Doors</span>
+                                <input type="number" id="doors" class="form-control" value="0">
+                            </div>
+                            <div class="sub-link">
+                                <span>Number of Windows</span>
+                                <input type="number" id="windows" class="form-control" value="0">
+                            </div>
+                            <div class="sub-link">
+                                <span>Number of Coats</span>
+                                <select id="coats" class="form-select">
+                                    <option value="1">1 Coat</option>
+                                    <option value="2" selected>2 Coats</option>
+                                    <option value="3">3 Coats</option>
+                                </select>
+                            </div>
+                            <button class="sub-link" onclick="calculatePaint()" style="background-color: var(--primary-color); color: var(--text-white);">Calculate <i class="fa-solid fa-arrow-right arrow"></i></button>
+                        </div>
+                    </div>
+                    <div id="resultBox" class="cat-card stagger-3" style="display: none;">
+                        <h3>Results</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link"><span>Paintable Area:</span><span id="resArea">0 sq ft</span></div>
+                            <div class="sub-link"><span>Gallons Needed:</span><span id="resGallons">0</span></div>
+                            <div class="sub-link"><span>(Approx. Liters):</span><span id="resLiters">0</span></div>
+                        </div>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>SMART HUB | All Rights Reserved © 2025</p></footer>
+            </div>
+        </main>
+    </div>
+    <script src="../script.js"></script>
+    <script>
+        function calculatePaint() {
+            const height = parseFloat(document.getElementById('wallHeight').value);
+            const perimeter = parseFloat(document.getElementById('wallPerimeter').value);
+            const doors = parseInt(document.getElementById('doors').value) || 0;
+            const windows = parseInt(document.getElementById('windows').value) || 0;
+            const coats = parseInt(document.getElementById('coats').value);
+
+            if (!height || !perimeter) { alert("Please enter Height and Total Width."); return; }
+
+            const DOOR_AREA = 21;
+            const WINDOW_AREA = 12;
+            const COVERAGE_PER_GALLON = 350;
+
+            const grossArea = height * perimeter;
+            const deductions = (doors * DOOR_AREA) + (windows * WINDOW_AREA);
+            let netArea = grossArea - deductions;
+            if (netArea < 0) netArea = 0;
+
+            const totalAreaToPaint = netArea * coats;
+            const gallonsNeeded = totalAreaToPaint / COVERAGE_PER_GALLON;
+            const litersNeeded = gallonsNeeded * 3.785;
+
+            document.getElementById('resArea').innerText = totalAreaToPaint.toFixed(0) + " sq ft";
+            document.getElementById('resGallons').innerText = gallonsNeeded.toFixed(2) + " gal";
+            document.getElementById('resLiters').innerText = litersNeeded.toFixed(2);
+            document.getElementById('resultBox').style.display = 'block';
+
+            saveCalculation('Paint Calc', `Wall: ${height}x${perimeter}ft, Coats: ${coats}`, `Paint: ${gallonsNeeded.toFixed(2)} gal`);
+        }
+    </script>
+</body>
+</html>

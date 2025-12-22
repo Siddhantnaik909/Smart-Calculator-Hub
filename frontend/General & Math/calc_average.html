@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Average Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i>
+                SMART HUB
+            </div>
+            <nav class="side-menu">
+                <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+                <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+                <a href="../history.html"><i class="fa fa-history"></i> History</a>
+                <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+                <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+            </nav>
+            <div class="sidebar-footer"><p>© 2025 Smart Hub Products.</p></div>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Average Calculator</h1>
+            </header>
+
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1">
+                        <h3>Enter Numbers</h3>
+                        <p>Enter numbers separated by commas or spaces.</p>
+                        <textarea id="numInput" class="form-control" placeholder="10, 25, 40, 50" style="height: 100px;"></textarea>
+                        <div class="sub-cat-list" style="margin-top: 1rem;">
+                            <button class="sub-link" onclick="calculateAverage()" style="background-color: var(--primary-color); color: var(--text-white);">Calculate</button>
+                            <button class="sub-link" onclick="clearInput()" style="background-color: #e74c3c; color: var(--text-white);">Clear</button>
+                        </div>
+                    </div>
+
+                    <div id="resultGrid" class="cat-card stagger-2" style="display: none;">
+                        <h3>Results</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link" style="flex-direction: column; align-items: center; background-color: var(--bg-main);">
+                                <h4 style="margin-bottom: 0.5rem;">Mean (Average)</h4>
+                                <span id="resMean" style="font-size: 2rem; font-weight: 700; color: var(--primary-color);">0</span>
+                            </div>
+                            <div class="sub-link">
+                                <span>Sum</span>
+                                <span id="resSum">0</span>
+                            </div>
+                            <div class="sub-link">
+                                <span>Count</span>
+                                <span id="resCount">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>SMART HUB | All Rights Reserved © 2025</p></footer>
+            </div>
+        </main>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+        function calculateAverage() {
+            const input = document.getElementById('numInput').value;
+            const strArr = input.split(/[\s,]+/).filter(item => item.trim() !== '');
+            const numArr = strArr.map(Number).filter(n => !isNaN(n));
+
+            if (numArr.length === 0) return;
+
+            const sum = numArr.reduce((a, b) => a + b, 0);
+            const mean = sum / numArr.length;
+
+            document.getElementById('resMean').innerText = parseFloat(mean.toFixed(2));
+            document.getElementById('resSum').innerText = parseFloat(sum.toFixed(2));
+            document.getElementById('resCount').innerText = numArr.length;
+            document.getElementById('resultGrid').style.display = 'block';
+
+            // Save to History (Trimming input string for display)
+            const inputDisplay = numArr.length > 5 ? numArr.slice(0, 5).join(', ') + '...' : numArr.join(', ');
+            saveCalculation('Average', `Input: ${inputDisplay}`, `Mean: ${mean.toFixed(2)}, Sum: ${sum}`);
+        }
+
+        function clearInput() {
+            document.getElementById('numInput').value = "";
+            document.getElementById('resultGrid').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

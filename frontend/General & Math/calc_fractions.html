@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Fractions Calculator</title>
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<div class="dashboard-layout" id="dashboard-wrapper">
+    <div class="overlay" id="mobile-overlay"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="brand-block">
+            <i class="fa-solid fa-microchip"
+               style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i>
+            SMART HUB
+        </div>
+
+        <nav class="side-menu">
+            <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+            <a href="../calculators.html" class="active">
+                <i class="fa-solid fa-calculator"></i> Calculators
+            </a>
+            <a href="../history.html"><i class="fa fa-history"></i> History</a>
+            <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+            <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <p>© 2025 Smart Hub Products.</p>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <header class="content-header">
+            <div class="mobile-toggle" id="mobile-toggle-btn">
+                <i class="fa fa-bars"></i>
+            </div>
+            <h1 class="fade-in">Fractions Calculator</h1>
+        </header>
+
+        <div class="page-body">
+            <section class="container grid-section fade-in delay-1">
+
+                <!-- INPUT CARD -->
+                <div class="cat-card stagger-1">
+                    <h3>Fraction Input</h3>
+
+                    <div style="display:flex; justify-content:center; gap:20px; margin:20px 0;">
+
+                        <div style="text-align:center;">
+                            <input id="num1" type="number" class="form-control" placeholder="1">
+                            <div style="height:2px; background:#333; margin:4px 0;"></div>
+                            <input id="den1" type="number" class="form-control" placeholder="2">
+                        </div>
+
+                        <select id="operation" class="form-control" style="width:80px;">
+                            <option value="add">+</option>
+                            <option value="subtract">−</option>
+                            <option value="multiply">×</option>
+                            <option value="divide">÷</option>
+                        </select>
+
+                        <div style="text-align:center;">
+                            <input id="num2" type="number" class="form-control" placeholder="3">
+                            <div style="height:2px; background:#333; margin:4px 0;"></div>
+                            <input id="den2" type="number" class="form-control" placeholder="4">
+                        </div>
+                    </div>
+
+                    <button id="calculateBtn"
+                            class="sub-link"
+                            style="background:var(--primary-color); color:white;">
+                        Calculate
+                    </button>
+                </div>
+
+                <!-- STEP BY STEP RESULT -->
+                <div id="stepsBox" class="cat-card stagger-2" style="display:none;">
+                    <h3>Step-by-Step Solution</h3>
+
+                    <ol id="stepsList"
+                        style="line-height:1.8; font-size:1rem; margin-bottom:20px;"></ol>
+
+                    <div style="text-align:center;">
+                        <strong>Final Answer</strong>
+                        <div style="font-size:2rem; color:var(--primary-color);">
+                            <span id="resNum">0</span>
+                            <div style="height:3px; width:60px; background:var(--primary-color); margin:6px auto;"></div>
+                            <span id="resDen">0</span>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <footer class="content-footer">
+                <p>SMART HUB | All Rights Reserved © 2025</p>
+            </footer>
+        </div>
+    </main>
+</div>
+
+<!-- GLOBAL SCRIPT -->
+<script src="../script.js"></script>
+
+<!-- PAGE SCRIPT -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+
+    document.getElementById("calculateBtn").addEventListener("click", () => {
+
+        const stepsList = document.getElementById("stepsList");
+        const stepsBox = document.getElementById("stepsBox");
+
+        stepsList.innerHTML = "";
+
+        const num1 = parseInt(document.getElementById("num1").value) || 0;
+        const den1 = parseInt(document.getElementById("den1").value) || 1;
+        const num2 = parseInt(document.getElementById("num2").value) || 0;
+        const den2 = parseInt(document.getElementById("den2").value) || 1;
+        const op = document.getElementById("operation").value;
+
+        if (den1 === 0 || den2 === 0) {
+            alert("Denominator cannot be zero");
+            return;
+        }
+
+        stepsList.innerHTML += `<li>Given fractions: ${num1}/${den1} and ${num2}/${den2}</li>`;
+
+        let resNum, resDen, symbol, formula;
+
+        switch (op) {
+            case "add":
+                symbol = "+";
+                formula = "(a/b + c/d) = (ad + bc) / bd";
+                resNum = num1 * den2 + num2 * den1;
+                resDen = den1 * den2;
+                break;
+
+            case "subtract":
+                symbol = "−";
+                formula = "(a/b − c/d) = (ad − bc) / bd";
+                resNum = num1 * den2 - num2 * den1;
+                resDen = den1 * den2;
+                break;
+
+            case "multiply":
+                symbol = "×";
+                formula = "(a/b × c/d) = (a×c) / (b×d)";
+                resNum = num1 * num2;
+                resDen = den1 * den2;
+                break;
+
+            case "divide":
+                if (num2 === 0) {
+                    alert("Cannot divide by zero fraction");
+                    return;
+                }
+                symbol = "÷";
+                formula = "(a/b ÷ c/d) = (a×d) / (b×c)";
+                resNum = num1 * den2;
+                resDen = den1 * num2;
+                break;
+        }
+
+        stepsList.innerHTML += `<li>Operation selected: ${symbol}</li>`;
+        stepsList.innerHTML += `<li>Formula used: ${formula}</li>`;
+        stepsList.innerHTML += `<li>After calculation: ${resNum}/${resDen}</li>`;
+
+        const divisor = gcd(Math.abs(resNum), Math.abs(resDen));
+        const simpNum = resNum / divisor;
+        const simpDen = resDen / divisor;
+
+        stepsList.innerHTML += `<li>GCD = ${divisor}</li>`;
+        stepsList.innerHTML += `<li>Simplified result: ${simpNum}/${simpDen}</li>`;
+
+        document.getElementById("resNum").textContent = simpNum;
+        document.getElementById("resDen").textContent = simpDen;
+
+        stepsBox.style.display = "block";
+
+        if (typeof saveCalculation === "function") {
+            saveCalculation(
+                "Fractions (Step-by-Step)",
+                `${num1}/${den1} ${symbol} ${num2}/${den2}`,
+                `Result: ${simpNum}/${simpDen}`
+            );
+        }
+    });
+});
+</script>
+
+</body>
+</html>

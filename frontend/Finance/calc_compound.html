@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Compound Interest</title>
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<div class="dashboard-layout" id="dashboard-wrapper">
+    <div class="overlay" id="mobile-overlay"></div>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="brand-block">
+            <i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i>
+            SMART HUB
+        </div>
+
+        <nav class="side-menu">
+            <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+            <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+            <a href="../history.html"><i class="fa fa-history"></i> History</a>
+            <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+            <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <p>© 2025 Smart Hub Products.</p>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <header class="content-header">
+            <div class="mobile-toggle" id="mobile-toggle-btn">
+                <i class="fa fa-bars"></i>
+            </div>
+            <h1 class="fade-in">Compound Interest</h1>
+        </header>
+
+        <div class="page-body">
+            <section class="container grid-section fade-in delay-1">
+
+                <!-- INPUT CARD -->
+                <div class="cat-card stagger-1">
+                    <h3>Investment Plan</h3>
+
+                    <div class="sub-cat-list">
+
+                        <div class="sub-link">
+                            <span>Currency</span>
+                            <select id="currency" class="form-control">
+                                <option value="USD">USD ($)</option>
+                                <option value="INR">INR (₹)</option>
+                                <option value="EUR">EUR (€)</option>
+                                <option value="GBP">GBP (£)</option>
+                            </select>
+                        </div>
+
+                        <div class="sub-link">
+                            <span>Initial Principal</span>
+                            <input type="number" id="principal" class="form-control" placeholder="e.g. 5000">
+                        </div>
+
+                        <div class="sub-link">
+                            <span>Annual Interest Rate (%)</span>
+                            <input type="number" id="rate" class="form-control" placeholder="e.g. 7">
+                        </div>
+
+                        <div class="sub-link">
+                            <span>Time Period (Years)</span>
+                            <input type="number" id="years" class="form-control" placeholder="e.g. 10">
+                        </div>
+
+                        <div class="sub-link">
+                            <span>Compounding Frequency</span>
+                            <select id="frequency" class="form-control">
+                                <option value="1">Annually (1x/yr)</option>
+                                <option value="4">Quarterly (4x/yr)</option>
+                                <option value="12" selected>Monthly (12x/yr)</option>
+                                <option value="365">Daily (365x/yr)</option>
+                            </select>
+                        </div>
+
+                        <button class="sub-link"
+                                onclick="calculateCompound()"
+                                style="background-color: var(--primary-color); color: var(--text-white); justify-content: center;">
+                            Calculate Growth <i class="fa-solid fa-chart-line"></i>
+                        </button>
+
+                    </div>
+                </div>
+
+                <!-- RESULT CARD -->
+                <div id="resultBox" class="cat-card stagger-2" style="display: none;">
+                    <h3>Future Value</h3>
+
+                    <div class="sub-cat-list">
+
+                        <div class="sub-link"
+                             style="justify-content: center; flex-direction: column; background-color: var(--bg-main);">
+                            <span id="futureValue"
+                                  style="font-size: 2.2rem; font-weight: 800; color: var(--accent-cyan);">
+                                0.00
+                            </span>
+                            <span style="font-size: 0.9rem; color: var(--text-muted);">
+                                Total Amount
+                            </span>
+                        </div>
+
+                        <div class="sub-link" style="justify-content: space-between;">
+                            <span>Invested</span>
+                            <span id="investedVal" style="font-weight: 600;">0.00</span>
+                        </div>
+
+                        <div class="sub-link" style="justify-content: space-between;">
+                            <span>Total Interest Earned</span>
+                            <span id="interestVal"
+                                  style="font-weight: 600; color: #10b981;">0.00</span>
+                        </div>
+
+                    </div>
+                </div>
+
+            </section>
+
+            <footer class="content-footer">
+                <p>© 2025 Smart Hub Products.</p>
+            </footer>
+        </div>
+    </main>
+</div>
+
+<!-- GLOBAL SCRIPT -->
+<script src="../script.js"></script>
+
+<!-- PAGE SCRIPT -->
+<script>
+function calculateCompound() {
+    const p = parseFloat(document.getElementById('principal').value);
+    const r = parseFloat(document.getElementById('rate').value);
+    const t = parseFloat(document.getElementById('years').value);
+    const n = parseFloat(document.getElementById('frequency').value);
+    const currencyCode = document.getElementById('currency').value;
+
+    if (
+        isNaN(p) || p <= 0 ||
+        isNaN(r) || r <= 0 ||
+        isNaN(t) || t <= 0 ||
+        isNaN(n) || n <= 0
+    ) {
+        alert("Please enter valid positive values in all fields.");
+        return;
+    }
+
+    // Compound Interest Formula
+    const rateDecimal = r / 100;
+    const amount = p * Math.pow(1 + rateDecimal / n, n * t);
+    const interest = amount - p;
+
+    const localeMap = {
+        USD: 'en-US',
+        INR: 'en-IN',
+        EUR: 'de-DE',
+        GBP: 'en-GB'
+    };
+
+    const formatter = new Intl.NumberFormat(
+        localeMap[currencyCode] || 'en-US',
+        { style: 'currency', currency: currencyCode }
+    );
+
+    document.getElementById('futureValue').innerText = formatter.format(amount);
+    document.getElementById('investedVal').innerText = formatter.format(p);
+    document.getElementById('interestVal').innerText = formatter.format(interest);
+
+    document.getElementById('resultBox').style.display = 'block';
+
+    if (typeof saveCalculation === "function") {
+        saveCalculation(
+            "Compound Interest",
+            `Principal: ${p}, Rate: ${r}%, Time: ${t} years`,
+            `Future Value: ${formatter.format(amount)}`
+        );
+    }
+}
+
+document.getElementById('currency').addEventListener('change', () => {
+    if (document.getElementById('resultBox').style.display === 'block') {
+        calculateCompound();
+    }
+});
+</script>
+
+</body>
+</html>

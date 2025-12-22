@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Leap Year Checker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i> SMART HUB
+            </div>
+            <nav class="side-menu">
+                <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+                <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+                <a href="../history.html"><i class="fa fa-history"></i> History</a>
+                <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+                <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+            </nav>
+            <div class="sidebar-footer"><p>© 2024 Smart Hub Products.</p></div>
+        </aside>
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Leap Year Checker</h1>
+            </header>
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1">
+                        <h3>Check Year</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>Enter Year</span>
+                                <input type="number" id="yearInput" class="form-control" placeholder="e.g. 2024">
+                            </div>
+                            <button class="sub-link" onclick="checkLeapYear()" style="background-color: var(--primary-color); color: var(--text-white); justify-content: center;">
+                                Check Now
+                            </button>
+                        </div>
+                    </div>
+                    <div id="resultBox" class="cat-card stagger-2" style="display: none;">
+                        <h3>Result</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link" id="resContainer" style="flex-direction: column; align-items: center; justify-content: center;">
+                                <div id="resTitle" style="font-size: 1.8rem; font-weight: 700; margin-bottom: 10px;"></div>
+                                <span id="resDesc" style="color: var(--text-body);"></span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>SMART HUB | All Rights Reserved © 2025</p></footer>
+            </div>
+        </main>
+    </div>
+    <script src="../script.js"></script>
+    <script>
+        function checkLeapYear() {
+            const yearStr = document.getElementById('yearInput').value;
+            const year = parseInt(yearStr);
+
+            if (!yearStr || isNaN(year)) { alert("Please enter a valid year."); return; }
+
+            let isLeap = false;
+            if ((year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0)) {
+                isLeap = true;
+            }
+
+            const box = document.getElementById('resultBox');
+            const container = document.getElementById('resContainer');
+            const title = document.getElementById('resTitle');
+            const desc = document.getElementById('resDesc');
+
+            box.style.display = 'block';
+            let resultText = "";
+
+            if (isLeap) {
+                container.style.backgroundColor = "rgba(46, 204, 113, 0.15)";
+                container.style.border = "1px solid #2ecc71";
+                title.style.color = "#27ae60";
+                title.innerHTML = `<i class="fas fa-check-circle"></i> Leap Year`;
+                desc.innerText = `${year} has 366 days. February has 29 days.`;
+                resultText = "Yes (366 days)";
+            } else {
+                container.style.backgroundColor = "rgba(231, 76, 60, 0.15)";
+                container.style.border = "1px solid #e74c3c";
+                title.style.color = "#c0392b";
+                title.innerHTML = `<i class="fas fa-times-circle"></i> Not a Leap Year`;
+                desc.innerText = `${year} has 365 days. February has 28 days.`;
+                resultText = "No (365 days)";
+            }
+
+            saveCalculation('Leap Year', `Year: ${year}`, resultText);
+        }
+    </script>
+</body>
+</html>

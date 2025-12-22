@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Salary Converter</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i> SMART HUB
+            </div>
+            <nav class="side-menu">
+                <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+                <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+                <a href="../history.html"><i class="fa fa-history"></i> History</a>
+                <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+                <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+            </nav>
+            <div class="sidebar-footer"><p>© 2025 Smart Hub Products.</p></div>
+        </aside>
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Salary Converter</h1>
+            </header>
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1">
+                        <h3>Enter Your Pay</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>Currency</span>
+                                <select id="currency" class="form-control">
+                                    <option value="USD">USD ($)</option>
+                                    <option value="INR">INR (₹)</option>
+                                    <option value="EUR">EUR (€)</option>
+                                    <option value="GBP">GBP (£)</option>
+                                </select>
+                            </div>
+                            <div class="sub-link">
+                                <span>Amount</span>
+                                <input type="number" id="amount" class="form-control" value="50000">
+                            </div>
+                            <div class="sub-link">
+                                <span>Frequency</span>
+                                <select id="frequency" class="form-control">
+                                    <option value="annually">per Year</option>
+                                    <option value="monthly">per Month</option>
+                                    <option value="weekly">per Week</option>
+                                    <option value="daily">per Day</option>
+                                    <option value="hourly">per Hour</option>
+                                </select>
+                            </div>
+                            <button id="calcBtn" class="sub-link" style="justify-content: center; background-color: var(--primary-color); color: white;">Convert & Save</button>
+                        </div>
+                    </div>
+                    <div class="cat-card stagger-2">
+                        <h3>Converted Salaries</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link" id="res-annually"><span>Annual</span><span class="value">$0</span></div>
+                            <div class="sub-link" id="res-monthly"><span>Monthly</span><span class="value">$0</span></div>
+                            <div class="sub-link" id="res-weekly"><span>Weekly</span><span class="value">$0</span></div>
+                            <div class="sub-link" id="res-daily"><span>Daily</span><span class="value">$0</span></div>
+                            <div class="sub-link" id="res-hourly"><span>Hourly</span><span class="value">$0</span></div>
+                        </div>
+                        <p style="text-align: center; font-size: 0.8rem; color: var(--text-body); margin-top: 20px;">Based on a standard 40-hour work week.</p>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>© 2025 Smart Hub Products.</p></footer>
+            </div>
+        </main>
+    </div>
+    <script src="../script.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const amountInput = document.getElementById('amount');
+        const frequencySelect = document.getElementById('frequency');
+        const currencySelect = document.getElementById('currency');
+        const calcBtn = document.getElementById('calcBtn');
+        
+        const results = {
+            annually: document.querySelector('#res-annually .value'),
+            monthly: document.querySelector('#res-monthly .value'),
+            weekly: document.querySelector('#res-weekly .value'),
+            daily: document.querySelector('#res-daily .value'),
+            hourly: document.querySelector('#res-hourly .value')
+        };
+        const resultItems = document.querySelectorAll('.sub-link[id^="res-"]');
+
+        const factors = { HOURS_PER_DAY: 8, DAYS_PER_WEEK: 5, WEEKS_PER_YEAR: 52 };
+        factors.DAYS_PER_YEAR = factors.DAYS_PER_WEEK * factors.WEEKS_PER_YEAR;
+        factors.HOURS_PER_YEAR = factors.HOURS_PER_DAY * factors.DAYS_PER_YEAR;
+
+        function calculate(save = false) {
+            const amount = parseFloat(amountInput.value) || 0;
+            const frequency = frequencySelect.value;
+            const currencyCode = currencySelect.value;
+            
+            let annualSalary = 0;
+            switch(frequency) {
+                case 'annually': annualSalary = amount; break;
+                case 'monthly': annualSalary = amount * 12; break;
+                case 'weekly': annualSalary = amount * factors.WEEKS_PER_YEAR; break;
+                case 'daily': annualSalary = amount * factors.DAYS_PER_YEAR; break;
+                case 'hourly': annualSalary = amount * factors.HOURS_PER_YEAR; break;
+            }
+
+            let locale = 'en-US';
+            if(currencyCode === 'INR') locale = 'en-IN';
+            else if(currencyCode === 'EUR') locale = 'de-DE';
+            else if(currencyCode === 'GBP') locale = 'en-GB';
+
+            const format = (val) => val.toLocaleString(locale, { style: 'currency', currency: currencyCode });
+
+            results.annually.textContent = format(annualSalary);
+            results.monthly.textContent = format(annualSalary / 12);
+            results.weekly.textContent = format(annualSalary / factors.WEEKS_PER_YEAR);
+            results.daily.textContent = format(annualSalary / factors.DAYS_PER_YEAR);
+            results.hourly.textContent = format(annualSalary / factors.HOURS_PER_YEAR);
+            
+            resultItems.forEach(item => item.style.backgroundColor = 'var(--bg-main)');
+            document.getElementById(`res-${frequency}`).style.backgroundColor = 'var(--primary-color)';
+            document.getElementById(`res-${frequency}`).style.color = 'white';
+
+            if(save) {
+                saveCalculation('Salary', `${amount} / ${frequency}`, `Annual: ${format(annualSalary)}`);
+            }
+        }
+
+        amountInput.addEventListener('input', () => calculate(false));
+        frequencySelect.addEventListener('change', () => calculate(false));
+        currencySelect.addEventListener('change', () => calculate(false));
+        calcBtn.addEventListener('click', () => calculate(true));
+
+        calculate(false); // Initial calculation
+    });
+    </script>
+</body>
+</html>

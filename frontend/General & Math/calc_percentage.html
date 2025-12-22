@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Percentage Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i>
+                SMART HUB
+            </div>
+            <nav class="side-menu">
+                <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+                <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+                <a href="../history.html"><i class="fa fa-history"></i> History</a>
+                <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+                <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+            </nav>
+            <div class="sidebar-footer"><p>© 2025 Smart Hub Products.</p></div>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Percentage Calculator</h1>
+            </header>
+
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1">
+                        <h3>Calculation Mode</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>Calculation Type</span>
+                                <select id="mode" class="form-control">
+                                    <option value="pOfN">What is P% of N?</option>
+                                    <option value="xIsWhatPOfY">X is what percent of Y?</option>
+                                    <option value="increaseDecrease">% increase/decrease from X to Y</option>
+                                </select>
+                            </div>
+                            <div class="sub-link">
+                                <span id="labelX">Percentage (P)</span>
+                                <input type="number" id="valueX" class="form-control" placeholder="e.g. 20">
+                            </div>
+                            <div class="sub-link">
+                                <span id="labelY">Number (N)</span>
+                                <input type="number" id="valueY" class="form-control" placeholder="e.g. 500">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cat-card stagger-2">
+                        <h3>Result</h3>
+                        <div id="resultValue" style="font-size: 2.5rem; font-weight: 700; text-align: center; color: var(--primary-color);">0</div>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>SMART HUB | All Rights Reserved © 2025</p></footer>
+            </div>
+        </main>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const modeSelect = document.getElementById('mode');
+        const valueXInput = document.getElementById('valueX');
+        const valueYInput = document.getElementById('valueY');
+        const labelX = document.getElementById('labelX');
+        const labelY = document.getElementById('labelY');
+        const resultValueEl = document.getElementById('resultValue');
+
+        function updateLabels() {
+            const mode = modeSelect.value;
+            switch (mode) {
+                case 'pOfN': labelX.textContent = 'Percentage (P)'; labelY.textContent = 'Number (N)'; break;
+                case 'xIsWhatPOfY': labelX.textContent = 'X is'; labelY.textContent = 'of Y'; break;
+                case 'increaseDecrease': labelX.textContent = 'From X'; labelY.textContent = 'To Y'; break;
+            }
+            calculate();
+        }
+
+        function calculate() {
+            const mode = modeSelect.value;
+            const x = parseFloat(valueXInput.value);
+            const y = parseFloat(valueYInput.value);
+
+            if (isNaN(x) || isNaN(y)) {
+                resultValueEl.textContent = "0";
+                return;
+            }
+            
+            let result = 0;
+            let resultString = "0";
+            let historyDesc = "";
+
+            try {
+                switch (mode) {
+                    case 'pOfN':
+                        result = (x / 100) * y;
+                        resultString = result.toLocaleString();
+                        historyDesc = `${x}% of ${y}`;
+                        break;
+                    case 'xIsWhatPOfY':
+                        if (y === 0) throw new Error("Cannot divide by zero.");
+                        result = (x / y) * 100;
+                        resultString = `${result.toFixed(2)}%`;
+                        historyDesc = `${x} is what % of ${y}?`;
+                        break;
+                    case 'increaseDecrease':
+                        if (x === 0) throw new Error("Cannot calculate change from zero.");
+                        result = ((y - x) / x) * 100;
+                        const prefix = result >= 0 ? '+' : '';
+                        resultString = `${prefix}${result.toFixed(2)}%`;
+                        historyDesc = `Change from ${x} to ${y}`;
+                        break;
+                }
+                 resultValueEl.textContent = resultString;
+                 
+                 // Save to history (Debounce or explicit save recommended, but direct here works for simple usage)
+                 if(document.activeElement !== valueXInput && document.activeElement !== valueYInput) {
+                     // Using a small hack to avoid saving on every keypress: only save when calculation completes and field loses focus or on load/change
+                     // Ideally add a "Calculate" button for history saving context
+                 }
+                 // Simple save call
+                 saveCalculation('Percentage', historyDesc, `Result: ${resultString}`);
+
+            } catch (error) {
+                resultValueEl.textContent = "Error";
+            }
+        }
+
+        // To prevent spamming history on every keystroke, we will only save when the user changes fields or mode
+        // For real-time calculation display, we still listen to input
+        valueXInput.addEventListener('input', () => { 
+            const mode = modeSelect.value; const x = parseFloat(valueXInput.value); const y = parseFloat(valueYInput.value);
+            // ... Logic duplicated just for display ...
+            // Simply calling calculate() here would flood history. 
+            // Recommendation: Add a debouncer or only update UI here.
+        });
+        
+        // Let's modify: Calculate on 'change' (enter/blur) for history saving
+        valueXInput.addEventListener('change', calculate);
+        valueYInput.addEventListener('change', calculate);
+        modeSelect.addEventListener('change', updateLabels);
+
+        updateLabels();
+    });
+    </script>
+</body>
+</html>

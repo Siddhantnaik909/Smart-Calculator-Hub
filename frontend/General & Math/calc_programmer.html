@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Programmer Calculator</title>
+    <link rel="stylesheet" href="../style.css">  
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i>
+                SMART HUB
+            </div>
+            <nav class="side-menu">
+                <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+                <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+                <a href="../history.html"><i class="fa fa-history"></i> History</a>
+                <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+                <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+            </nav>
+            <div class="sidebar-footer"><p>© 2025 Smart Hub Products.</p></div>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Programmer Calculator</h1>
+            </header>
+
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1">
+                        <h3>Base Converter</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>DEC</span>
+                                <input type="text" id="dec" data-base="10" placeholder="Decimal" class="form-control">
+                            </div>
+                            <div class="sub-link">
+                                <span>HEX</span>
+                                <input type="text" id="hex" data-base="16" placeholder="Hexadecimal" class="form-control">
+                            </div>
+                            <div class="sub-link">
+                                <span>BIN</span>
+                                <input type="text" id="bin" data-base="2" placeholder="Binary" class="form-control">
+                            </div>
+                            <div class="sub-link">
+                                <span>OCT</span>
+                                <input type="text" id="oct" data-base="8" placeholder="Octal" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>SMART HUB | All Rights Reserved © 2025</p></footer>
+            </div>
+        </main>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const inputs = {
+            dec: document.getElementById('dec'),
+            hex: document.getElementById('hex'),
+            bin: document.getElementById('bin'),
+            oct: document.getElementById('oct')
+        };
+
+        const validationPatterns = {
+            dec: /^[0-9]*$/,
+            hex: /^[0-9a-f]*$/i,
+            bin: /^[01]*$/,
+            oct: /^[0-7]*$/
+        };
+
+        let isUpdating = false;
+        let saveTimer; // Timer for history saving
+
+        function updateAll(sourceId, sourceValue) {
+            if (isUpdating) return;
+            isUpdating = true;
+
+            const sourceBase = parseInt(inputs[sourceId].dataset.base, 10);
+            
+            // 1. Validate Input
+            if (!validationPatterns[sourceId].test(sourceValue)) {
+                inputs[sourceId].classList.add('invalid');
+                isUpdating = false;
+                return;
+            }
+            inputs[sourceId].classList.remove('invalid');
+            
+            // 2. Convert
+            const decimalValue = sourceValue === '' ? NaN : parseInt(sourceValue, sourceBase);
+
+            // 3. Update fields
+            for (const id in inputs) {
+                if (id === sourceId) continue;
+                inputs[id].classList.remove('invalid');
+                
+                if (isNaN(decimalValue)) {
+                    inputs[id].value = '';
+                } else {
+                    const targetBase = parseInt(inputs[id].dataset.base, 10);
+                    inputs[id].value = decimalValue.toString(targetBase).toUpperCase();
+                }
+            }
+            
+            isUpdating = false;
+
+            // --- 4. HISTORY AUTO-SAVE ---
+            clearTimeout(saveTimer);
+            
+            if (!isNaN(decimalValue)) {
+                // Wait 1.5 seconds after typing stops, then save
+                saveTimer = setTimeout(() => {
+                    saveCalculation(
+                        'Programmer Calc', 
+                        `${sourceId.toUpperCase()}: ${sourceValue}`, 
+                        `DEC: ${decimalValue} | HEX: ${inputs.hex.value}`
+                    );
+                    console.log("Auto-saved to history!");
+                }, 1500); 
+            }
+        }
+
+        // Add listeners
+        for (const id in inputs) {
+            inputs[id].addEventListener('input', (e) => {
+                updateAll(id, e.target.value);
+            });
+        }
+    });
+    </script>
+</body>
+</html>

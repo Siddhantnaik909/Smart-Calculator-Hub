@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Scientific Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i>
+                SMART HUB
+            </div>
+            <nav class="side-menu">
+                <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+                <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+                <a href="../history.html"><i class="fa fa-history"></i> History</a>
+                <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+                <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+            </nav>
+            <div class="sidebar-footer"><p>© 2025 Smart Hub Products.</p></div>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Scientific Calculator</h1>
+            </header>
+
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1" style="max-width: 500px; margin: auto;">
+                        <input type="text" id="display" readonly placeholder="0" class="form-control" style="height: 65px; text-align: right; font-size: 2rem; margin-bottom: 1rem;">
+                        <div class="deg-rad-toggle" style="text-align: right; margin-bottom: 1rem;">
+                            <button id="degBtn" class="sub-link active">DEG</button>
+                            <button id="radBtn" class="sub-link">RAD</button>
+                        </div>
+                        <div class="calc-buttons" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;">
+                            <button class="sub-link operator" data-func="sin(">sin</button>
+                            <button class="sub-link operator" data-func="cos(">cos</button>
+                            <button class="sub-link operator" data-func="tan(">tan</button>
+                            <button class="sub-link operator" data-func="log(">log</button>
+                            <button class="sub-link operator" data-func="ln(">ln</button>
+                            
+                            <button class="sub-link operator" data-func="^">x<sup>y</sup></button>
+                            <button class="sub-link" data-char="7">7</button>
+                            <button class="sub-link" data-char="8">8</button>
+                            <button class="sub-link" data-char="9">9</button>
+                            <button class="sub-link operator" data-char="/"><i class="fas fa-divide"></i></button>
+
+                            <button class="sub-link operator" data-func="sqrt(">√</button>
+                            <button class="sub-link" data-char="4">4</button>
+                            <button class="sub-link" data-char="5">5</button>
+                            <button class="sub-link" data-char="6">6</button>
+                            <button class="sub-link operator" data-char="*"><i class="fas fa-times"></i></button>
+
+                            <button class="sub-link operator" data-char="(">(</button>
+                            <button class="sub-link" data-char="1">1</button>
+                            <button class="sub-link" data-char="2">2</button>
+                            <button class="sub-link" data-char="3">3</button>
+                            <button class="sub-link operator" data-char="-"><i class="fas fa-minus"></i></button>
+                            
+                            <button class="sub-link operator" data-char=")">)</button>
+                            <button class="sub-link" data-char="0">0</button>
+                            <button class="sub-link" data-char=".">.</button>
+                            <button class="sub-link" id="clear">C</button>
+                            <button class="sub-link operator" data-char="+"><i class="fas fa-plus"></i></button>
+
+                            <button class="sub-link" data-char="π">π</button>
+                            <button class="sub-link" data-char="e">e</button>
+                            <button class="sub-link operator" id="backspace" style="grid-column: span 2;"><i class="fa fa-delete-left"></i></button>
+                            <button class="sub-link equal" id="equals" style="background-color: var(--primary-color); color: white;">=</button>
+                        </div>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>SMART HUB | All Rights Reserved © 2025</p></footer>
+            </div>
+        </main>
+    </div>
+    
+    <script src="../script.js"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const display = document.getElementById('display');
+    const buttons = document.querySelector('.calc-buttons');
+    let isDeg = true;
+    let lastAnswer = 0;
+
+    const append = v => display.value += v;
+
+    buttons.addEventListener('click', e => {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+
+        if (btn.dataset.char) {
+            if (btn.dataset.char === 'ANS') {
+                append(lastAnswer);
+            } else {
+                append(btn.dataset.char);
+            }
+        }
+
+        if (btn.dataset.func) append(btn.dataset.func);
+
+        if (btn.id === 'clear') display.value = '';
+        if (btn.id === 'backspace') display.value = display.value.slice(0, -1);
+        if (btn.id === 'equals') calculate();
+    });
+
+    degBtn.onclick = () => {
+        isDeg = true;
+        degBtn.classList.add('active');
+        radBtn.classList.remove('active');
+    };
+
+    radBtn.onclick = () => {
+        isDeg = false;
+        radBtn.classList.add('active');
+        degBtn.classList.remove('active');
+    };
+
+    function factorial(n) {
+        if (n < 0 || !Number.isInteger(n)) return NaN;
+        let r = 1;
+        for (let i = 2; i <= n; i++) r *= i;
+        return r;
+    }
+
+    function calculate() {
+        try {
+            const original = display.value;
+
+            let expr = original
+                .replace(/ANS/g, lastAnswer)
+                .replace(/π/g, 'Math.PI')
+                .replace(/\be\b/g, 'Math.E')
+                .replace(/\^/g, '**')
+                .replace(/(\d+)!/g, 'factorial($1)')
+                .replace(/log\(/g, 'Math.log10(')
+                .replace(/ln\(/g, 'Math.log(')
+                .replace(/sqrt\(/g, 'Math.sqrt(');
+
+            // Trig
+            expr = expr.replace(
+                /(Math\.sin|Math\.cos|Math\.tan)\(([^()]+)\)/g,
+                (_, fn, val) => {
+                    const angle = Function(`return ${val}`)();
+                    const rad = isDeg ? angle * Math.PI / 180 : angle;
+                    return `${fn}(${rad})`;
+                }
+            );
+
+            // Inverse Trig
+            expr = expr
+                .replace(/asin\(/g, 'Math.asin(')
+                .replace(/acos\(/g, 'Math.acos(')
+                .replace(/atan\(/g, 'Math.atan(');
+
+            const result = Function('factorial', `return ${expr}`)(factorial);
+
+            if (!isFinite(result)) throw new Error();
+
+            lastAnswer = parseFloat(result.toPrecision(14));
+            display.value = lastAnswer;
+
+            if (typeof saveCalculation === 'function') {
+                saveCalculation('Scientific', original, lastAnswer);
+            }
+
+        } catch {
+            display.value = 'Error';
+        }
+    }
+
+    // ⌨️ KEYBOARD SUPPORT
+    document.addEventListener('keydown', e => {
+        const k = e.key;
+
+        if (/[0-9.+\-*/()]/.test(k)) append(k);
+        if (k === 'Enter') calculate();
+        if (k === 'Backspace') display.value = display.value.slice(0, -1);
+        if (k === 'Escape') display.value = '';
+        if (k === '^') append('^');
+    });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Countdown Timer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i> SMART HUB
+            </div>
+            <nav class="side-menu">
+                <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+                <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+                <a href="../history.html"><i class="fa fa-history"></i> History</a>
+                <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+                <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+            </nav>
+            <div class="sidebar-footer"><p>© 2024 Smart Hub Products.</p></div>
+        </aside>
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Countdown Timer</h1>
+            </header>
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1">
+                        <h3>Set Target</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>Target Date & Time</span>
+                                <input type="datetime-local" id="targetDate" class="form-control">
+                            </div>
+                            <button class="sub-link" onclick="startCountdown()" style="background-color: var(--primary-color); color: var(--text-white); justify-content: center;">
+                                Start Countdown
+                            </button>
+                        </div>
+                    </div>
+                    <div id="resultBox" class="cat-card stagger-2" style="display: none; text-align: center;">
+                        <h3>Time Remaining</h3>
+                        <div class="sub-cat-list" style="flex-direction: row; justify-content: space-between; gap: 10px;">
+                            <div class="sub-link" style="flex-direction: column; background-color: var(--bg-main); flex: 1;">
+                                <span id="cdDays" style="font-size: 1.8rem; font-weight: 800; color: var(--primary-color);">0</span><span style="font-size: 0.8rem;">Days</span>
+                            </div>
+                            <div class="sub-link" style="flex-direction: column; background-color: var(--bg-main); flex: 1;">
+                                <span id="cdHours" style="font-size: 1.8rem; font-weight: 800; color: var(--primary-color);">0</span><span style="font-size: 0.8rem;">Hours</span>
+                            </div>
+                            <div class="sub-link" style="flex-direction: column; background-color: var(--bg-main); flex: 1;">
+                                <span id="cdMins" style="font-size: 1.8rem; font-weight: 800; color: var(--primary-color);">0</span><span style="font-size: 0.8rem;">Mins</span>
+                            </div>
+                            <div class="sub-link" style="flex-direction: column; background-color: var(--bg-main); flex: 1;">
+                                <span id="cdSecs" style="font-size: 1.8rem; font-weight: 800; color: var(--accent-cyan);">0</span><span style="font-size: 0.8rem;">Secs</span>
+                            </div>
+                        </div>
+                        <p id="cdMessage" style="margin-top: 15px; color: var(--text-muted); font-weight: 500;"></p>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>SMART HUB | All Rights Reserved © 2025</p></footer>
+            </div>
+        </main>
+    </div>
+    <script src="../script.js"></script>
+    <script>
+        let countdownInterval;
+
+        function startCountdown() {
+            const input = document.getElementById('targetDate').value;
+            if(!input) { alert("Please select a target date."); return; }
+
+            const targetTime = new Date(input).getTime();
+            const resultBox = document.getElementById('resultBox');
+            const msg = document.getElementById('cdMessage');
+            
+            resultBox.style.display = 'block';
+            clearInterval(countdownInterval);
+
+            saveCalculation('Countdown', `Target: ${input.replace('T', ' ')}`, 'Timer Started');
+
+            countdownInterval = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = targetTime - now;
+
+                if (distance < 0) {
+                    clearInterval(countdownInterval);
+                    msg.innerText = "TIME'S UP!";
+                    document.getElementById('cdDays').innerText = "0";
+                    document.getElementById('cdHours').innerText = "0";
+                    document.getElementById('cdMins').innerText = "0";
+                    document.getElementById('cdSecs').innerText = "0";
+                    return;
+                }
+
+                msg.innerText = "Counting down...";
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById('cdDays').innerText = days;
+                document.getElementById('cdHours').innerText = hours;
+                document.getElementById('cdMins').innerText = minutes;
+                document.getElementById('cdSecs').innerText = seconds;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
