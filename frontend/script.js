@@ -6,7 +6,8 @@
 // --- CONFIGURATION ---
 // CHANGE THIS to your Render URL when deployed (e.g., 'https://smart-hub-api.onrender.com')
 // For local testing, keep it as localhost:5000
-const API_URL = 'http://localhost:5000'; 
+const API_URL = 'https://smart-calculator-hub.onrender.com';
+// const API_URL = 'http://localhost:5000'; 
 
 // 1. Immediate Theme Loader (Prevent Flash)
 (function() {
