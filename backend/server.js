@@ -7,30 +7,29 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const path = require('path'); // IMPORT PATH MODULE
 
 // Import Models
 const User = require('./models/User');
 const History = require('./models/History');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+
+// --- RENDER FIX: DYNAMIC PORT ---
+// Render automatically assigns a PORT. We must also bind to 0.0.0.0
+const PORT = process.env.PORT || 10000; 
 const JWT_SECRET = process.env.JWT_SECRET || 'secret123';
 
 // --- MIDDLEWARE ---
 app.use(cors());
 app.use(express.json());
 
-// -------------------------------------------------------------------------
-// 1. SERVE FRONTEND FILES (The Fix)
-// This tells the server to look in the 'frontend' folder for HTML/CSS/JS
-// -------------------------------------------------------------------------
-app.use(express.static(path.join(__dirname, '../frontend')));
-
 // --- DB CONNECTION ---
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('✅ Connected to MongoDB'))
-  .catch(err => console.error('❌ DB Connection Error:', err));
+  .catch(err => {
+      console.error('❌ DB Connection Error:', err);
+      process.exit(1); // Exit if DB fails so Render can attempt a restart
+  });
 
 // --- AUTH MIDDLEWARE ---
 const authenticateToken = (req, res, next) => {
@@ -45,6 +44,9 @@ const authenticateToken = (req, res, next) => {
 };
 
 // --- API ROUTES ---
+
+// Health Check (To verify the server is awake)
+app.get('/api/health', (req, res) => res.json({ status: 'Server is running' }));
 
 // Signup
 app.post('/api/auth/signup', async (req, res) => {
@@ -98,14 +100,8 @@ app.delete('/api/history', authenticateToken, async (req, res) => {
     } catch (err) { res.status(500).json({ error: 'Error clearing history' }); }
 });
 
-// -------------------------------------------------------------------------
-// 2. CATCH-ALL ROUTE (For Page Navigation)
-// If a user types a URL that isn't an API, send them the login page (or index)
-// -------------------------------------------------------------------------
-// Use Regex /(.*)/ to match all routes in Express v5
-app.get(/(.*)/, (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/login.html')); 
-});
-
 // --- START SERVER ---
-app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+// IMPORTANT: Bind to '0.0.0.0' for Render/Cloud environments
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+});
