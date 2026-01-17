@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Savings Goal Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip"></i> SMART HUB
+            </div>
+            <nav class="side-menu">
+                <ul>
+                    <li><a href="../index.html"><i class="fa fa-home"></i> Dashboard</a></li>
+                    <li class="category">
+                        <div class="category-toggle"><i class="fa-solid fa-calculator"></i> Calculators <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                        <ul class="subcategory-list">
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Construction <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Construction/calc_concrete.html">Concrete</a></li>
+                                    <li><a href="../Construction/calc_flooring.html">Flooring</a></li>
+                                    <li><a href="../Construction/calc_fuel.html">Fuel Cost</a></li>
+                                    <li><a href="../Construction/calc_ohm.html">Ohm's Law</a></li>
+                                    <li><a href="../Construction/calc_paint.html">Paint</a></li>
+                                    <li><a href="../Construction/calc_wall_stud.html">Wall Stud</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Date & Time <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Date & Time/calc_age.html">Age</a></li>
+                                    <li><a href="../Date & Time/calc_countdown.html">Countdown</a></li>
+                                    <li><a href="../Date & Time/calc_date_diff.html">Date Difference</a></li>
+                                    <li><a href="../Date & Time/calc_leap_year.html">Leap Year</a></li>
+                                    <li><a href="../Date & Time/calc_time_add.html">Time Adder</a></li>
+                                    <li><a href="../Date & Time/calc_time_zone.html">Time Zone</a></li>
+                                    <li><a href="../Date & Time/calc_working_days.html">Working Days</a></li>
+                                    <li><a href="../Date & Time/calc_hours_worked.html">Hours Worked</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Finance <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Finance/calc_currency.html">Currency</a></li>
+                                    <li><a href="../Finance/calc_discount.html">Discount</a></li>
+                                    <li><a href="../Finance/calc_loan_emi.html">Loan EMI</a></li>
+                                    <li><a href="../Finance/calc_mortgage.html">Mortgage</a></li>
+                                    <li><a href="../Finance/calc_roi.html">ROI</a></li>
+                                    <li><a href="../Finance/calc_salary.html">Salary</a></li>
+                                    <li><a href="../Finance/calc_tax_gst.html">GST/Tax</a></li>
+                                    <li><a href="../Finance/tip_calculator.html">Tip</a></li>
+                                    <li><a href="../Finance/calc_compound.html">Compound Interest</a></li>
+                                    <li><a href="../Finance/calc_savings_goal.html">Savings Goal</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">General & Math <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../General & Math/calc_average.html">Average</a></li>
+                                    <li><a href="../General & Math/calc_fractions.html">Fractions</a></li>
+                                    <li><a href="../General & Math/calc_percentage.html">Percentage</a></li>
+                                    <li><a href="../General & Math/calc_programmer.html">Programmer</a></li>
+                                    <li><a href="../General & Math/calc_scientific.html">Scientific</a></li>
+                                    <li><a href="../General & Math/calc_standard.html">Standard</a></li>
+                                    <li><a href="../General & Math/tool_password.html">Password Generator</a></li>
+                                    <li><a href="../General & Math/calc_math_toolkit.html">Math Toolkit</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Health & Fitness <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Health & Fitness/calc_bmi.html">BMI</a></li>
+                                    <li><a href="../Health & Fitness/calc_bmr.html">BMR</a></li>
+                                    <li><a href="../Health & Fitness/calc_body_fat.html">Body Fat</a></li>
+                                    <li><a href="../Health & Fitness/calc_ovulation.html">Ovulation</a></li>
+                                    <li><a href="../Health & Fitness/calc_pregnancy.html">Pregnancy</a></li>
+                                    <li><a href="../Health & Fitness/calc_water.html">Water Intake</a></li>
+                                    <li><a href="../Health & Fitness/calc_calorie.html">Daily Calorie</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Students <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Students/calc_gpa.html">GPA</a></li>
+                                    <li><a href="../Students/calc_unit_conv.html">Unit Converter</a></li>
+                                    <li><a href="../Students/calc_grade_weighted.html">Weighted Grade</a></li>
+                                    <li><a href="../Students/calc_quadratic.html">Quadratic Solver</a></li>
+                                    <li><a href="../Students/calc_pomodoro.html">Pomodoro Timer</a></li>
+                                    <li><a href="../Students/calc_statistics.html">Statistics Tool</a></li>
+                                    <li><a href="../Students/calc_geometry.html">Geometry</a></li>
+                                    <li><a href="../Students/calc_mensuration.html">Mensuration</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Text & Web Utilities <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Text & Web Utilities/tool_word_counter.html">Word Counter</a></li>
+                                    <li><a href="../Text & Web Utilities/tool_case_converter.html">Case Converter</a></li>
+                                    <li><a href="../Text & Web Utilities/tool_lorem_ipsum.html">Lorem Ipsum</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="../history.html"><i class="fa fa-history"></i> History</a></li>
+                    <li><a href="../settings.html"><i class="fa fa-gear"></i> Settings</a></li>
+                    <li><a href="../about.html"><i class="fa fa-circle-info"></i> About</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer"><p>© 2025 Smart Hub Products.</p></div>
+        </aside>
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Savings Goal Calculator</h1>
+            </header>
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1">
+                        <h3>Goal Details</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>Currency</span>
+                                <select id="currency" class="form-control">
+                                    <option value="$">USD ($)</option>
+                                    <option value="₹">INR (₹)</option>
+                                    <option value="€">EUR (€)</option>
+                                    <option value="£">GBP (£)</option>
+                                </select>
+                            </div>
+                            <div class="sub-link">
+                                <span>Savings Goal</span>
+                                <input type="number" id="goal" class="form-control" placeholder="25000" min="0">
+                            </div>
+                            <div class="sub-link">
+                                <span>Initial Amount</span>
+                                <input type="number" id="initial" class="form-control" placeholder="1000" min="0">
+                            </div>
+                            <div class="sub-link">
+                                <span>Monthly Contribution</span>
+                                <input type="number" id="monthly" class="form-control" placeholder="500" min="0">
+                            </div>
+                            <div class="sub-link">
+                                <span>Annual Interest (%)</span>
+                                <input type="number" id="rate" class="form-control" placeholder="4" min="0">
+                            </div>
+                            <button class="sub-link" id="calculateBtn" style="background-color: var(--primary-color); color: var(--text-white);">Calculate <i class="fa-solid fa-arrow-right arrow"></i></button>
+                        </div>
+                    </div>
+                    <div id="resultBox" class="cat-card stagger-2" style="display: none;">
+                        <h3>Goal Summary</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link" style="flex-direction: column; align-items: center; background-color: var(--bg-main);">
+                                <h4 style="margin-bottom: 0.5rem;">Time to Goal</h4>
+                                <span id="timeValue" style="font-size: 2rem; font-weight: 700; color: var(--primary-color);">0 years</span>
+                            </div>
+                            <div class="sub-link"><span>Total Contributions</span><span id="totalContributions">0.00</span></div>
+                            <div class="sub-link"><span>Total Interest</span><span id="totalInterest">0.00</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="detailsSection" class="container fade-in delay-2" style="display: none; margin-top: 2rem;">
+                    <div class="cat-card stagger-3">
+                        <h3>Savings Diagram</h3>
+                        <canvas id="savingsChart" style="max-height: 300px;"></canvas>
+                    </div>
+                    <div class="cat-card stagger-4" style="margin-top: 2rem;">
+                        <h3>Workflow of Saving</h3>
+                        <div id="workflowTable" style="max-height: 300px; overflow-y: auto;"></div>
+                    </div>
+                </section>
+                
+                <footer class="content-footer" style="margin-top: 2rem;"><p>© 2025 Smart Hub Products.</p></footer>
+            </div>
+        </main>
+    </div>
+    <script src="../script.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const calculateBtn = document.getElementById('calculateBtn');
+        let savingsChart = null;
+
+        calculateBtn.addEventListener('click', () => {
+            const goal = parseFloat(document.getElementById('goal').value);
+            const initial = parseFloat(document.getElementById('initial').value) || 0;
+            const monthly = parseFloat(document.getElementById('monthly').value);
+            const annualRate = parseFloat(document.getElementById('rate').value) || 0;
+            const symbol = document.getElementById('currency').value;
+
+            if (isNaN(goal) || isNaN(monthly)) { alert("Please enter a valid goal and monthly contribution."); return; }
+            if (monthly <= 0) { alert("Monthly contribution must be positive."); return; }
+            if (initial >= goal) { alert("Initial amount is already at or above the goal."); return; }
+
+            const monthlyRate = annualRate / 12 / 100;
+            let balance = initial;
+            let months = 0;
+            const chartLabels = ['Start'];
+            const chartData = [initial];
+            let workflowHTML = '<table style="width: 100%; text-align: left;"><tr><th>Year</th><th>Start</th><th>Contributions</th><th>Interest</th><th>End</th></tr>';
+            let yearlyStart = initial;
+            let year = 1;
+
+            while (balance < goal) {
+                months++;
+                let interestThisMonth = balance * monthlyRate;
+                balance += monthly + interestThisMonth;
+
+                if (months % 12 === 0) {
+                    chartLabels.push(`Year ${year}`);
+                    chartData.push(balance);
+                    
+                    const yearlyContributions = monthly * 12;
+                    const yearlyInterest = balance - yearlyStart - yearlyContributions;
+                    workflowHTML += `<tr><td>${year}</td><td>${symbol}${yearlyStart.toFixed(2)}</td><td>${symbol}${yearlyContributions.toFixed(2)}</td><td>${symbol}${yearlyInterest.toFixed(2)}</td><td>${symbol}${balance.toFixed(2)}</td></tr>`;
+                    yearlyStart = balance;
+                    year++;
+                }
+            }
+
+            const years = Math.floor(months / 12);
+            const remainingMonths = months % 12;
+
+            document.getElementById('timeValue').textContent = `${years} years, ${remainingMonths} months`;
+            const totalContributions = initial + (monthly * months);
+            const totalInterest = balance - totalContributions;
+            document.getElementById('totalContributions').textContent = `${symbol}${totalContributions.toFixed(2)}`;
+            document.getElementById('totalInterest').textContent = `${symbol}${totalInterest.toFixed(2)}`;
+            
+            document.getElementById('resultBox').style.display = 'block';
+            document.getElementById('detailsSection').style.display = 'block';
+
+            // Workflow Table
+            workflowHTML += '</table>';
+            document.getElementById('workflowTable').innerHTML = workflowHTML;
+
+            // Chart
+            const ctx = document.getElementById('savingsChart').getContext('2d');
+            if (savingsChart) {
+                savingsChart.destroy();
+            }
+            savingsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartLabels,
+                    datasets: [{
+                        label: 'Savings Growth',
+                        data: chartData,
+                        borderColor: 'rgb(99, 102, 241)',
+                        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                        fill: true,
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            // Save to History
+            saveCalculation('Savings Goal', `Goal: ${symbol}${goal}`, `Time: ${years}y ${remainingMonths}m`);
+        });
+    });
+    </script>
+</body>
+</html>

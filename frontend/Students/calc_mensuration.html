@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Mensuration Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip" style="color: var(--primary-color); margin-right: 12px; font-size: 1.5rem;"></i>
+                SMART HUB
+            </div>
+            <nav class="side-menu">
+                <ul>
+                    <li><a href="../index.html"><i class="fa fa-home"></i> Dashboard</a></li>
+                    <li class="category">
+                        <div class="category-toggle"><i class="fa-solid fa-calculator"></i> Calculators <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                        <ul class="subcategory-list">
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Construction <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Construction/calc_concrete.html">Concrete</a></li>
+                                    <li><a href="../Construction/calc_flooring.html">Flooring</a></li>
+                                    <li><a href="../Construction/calc_fuel.html">Fuel Cost</a></li>
+                                    <li><a href="../Construction/calc_ohm.html">Ohm's Law</a></li>
+                                    <li><a href="../Construction/calc_paint.html">Paint</a></li>
+                                    <li><a href="../Construction/calc_wall_stud.html">Wall Stud</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Date & Time <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Date & Time/calc_age.html">Age</a></li>
+                                    <li><a href="../Date & Time/calc_countdown.html">Countdown</a></li>
+                                    <li><a href="../Date & Time/calc_date_diff.html">Date Difference</a></li>
+                                    <li><a href="../Date & Time/calc_leap_year.html">Leap Year</a></li>
+                                    <li><a href="../Date & Time/calc_time_add.html">Time Adder</a></li>
+                                    <li><a href="../Date & Time/calc_time_zone.html">Time Zone</a></li>
+                                    <li><a href="../Date & Time/calc_working_days.html">Working Days</a></li>
+                                    <li><a href="../Date & Time/calc_hours_worked.html">Hours Worked</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Finance <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Finance/calc_currency.html">Currency</a></li>
+                                    <li><a href="../Finance/calc_discount.html">Discount</a></li>
+                                    <li><a href="../Finance/calc_loan_emi.html">Loan EMI</a></li>
+                                    <li><a href="../Finance/calc_mortgage.html">Mortgage</a></li>
+                                    <li><a href="../Finance/calc_roi.html">ROI</a></li>
+                                    <li><a href="../Finance/calc_salary.html">Salary</a></li>
+                                    <li><a href="../Finance/calc_tax_gst.html">GST/Tax</a></li>
+                                    <li><a href="../Finance/tip_calculator.html">Tip</a></li>
+                                    <li><a href="../Finance/calc_compound.html">Compound Interest</a></li>
+                                    <li><a href="../Finance/calc_savings_goal.html">Savings Goal</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">General & Math <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../General & Math/calc_average.html">Average</a></li>
+                                    <li><a href="../General & Math/calc_fractions.html">Fractions</a></li>
+                                    <li><a href="../General & Math/calc_percentage.html">Percentage</a></li>
+                                    <li><a href="../General & Math/calc_programmer.html">Programmer</a></li>
+                                    <li><a href="../General & Math/calc_scientific.html">Scientific</a></li>
+                                    <li><a href="../General & Math/calc_standard.html">Standard</a></li>
+                                    <li><a href="../General & Math/tool_password.html">Password Generator</a></li>
+                                    <li><a href="../General & Math/calc_math_toolkit.html">Math Toolkit</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Health & Fitness <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Health & Fitness/calc_bmi.html">BMI</a></li>
+                                    <li><a href="../Health & Fitness/calc_bmr.html">BMR</a></li>
+                                    <li><a href="../Health & Fitness/calc_body_fat.html">Body Fat</a></li>
+                                    <li><a href="../Health & Fitness/calc_ovulation.html">Ovulation</a></li>
+                                    <li><a href="../Health & Fitness/calc_pregnancy.html">Pregnancy</a></li>
+                                    <li><a href="../Health & Fitness/calc_water.html">Water Intake</a></li>
+                                    <li><a href="../Health & Fitness/calc_calorie.html">Daily Calorie</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Students <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Students/calc_gpa.html">GPA</a></li>
+                                    <li><a href="../Students/calc_unit_conv.html">Unit Converter</a></li>
+                                    <li><a href="../Students/calc_grade_weighted.html">Weighted Grade</a></li>
+                                    <li><a href="../Students/calc_quadratic.html">Quadratic Solver</a></li>
+                                    <li><a href="../Students/calc_pomodoro.html">Pomodoro Timer</a></li>
+                                    <li><a href="../Students/calc_statistics.html">Statistics Tool</a></li>
+                                    <li><a href="../Students/calc_geometry.html">Geometry</a></li>
+                                    <li><a href="../Students/calc_mensuration.html">Mensuration</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Text & Web Utilities <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Text & Web Utilities/tool_word_counter.html">Word Counter</a></li>
+                                    <li><a href="../Text & Web Utilities/tool_case_converter.html">Case Converter</a></li>
+                                    <li><a href="../Text & Web Utilities/tool_lorem_ipsum.html">Lorem Ipsum</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="../history.html"><i class="fa fa-history"></i> History</a></li>
+                    <li><a href="../settings.html"><i class="fa fa-gear"></i> Settings</a></li>
+                    <li><a href="../about.html"><i class="fa fa-circle-info"></i> About</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Mensuration Calculator</h1>
+            </header>
+
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1">
+                        <h3>Select Shape & Formula</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>Shape</span>
+                                <select id="shapeSelect" class="form-control" onchange="updateInputs()">
+                                    <option value="coneVolume">Cone (Volume)</option>
+                                    <option value="coneCSA">Cone (Curved Surface Area)</option>
+                                    <option value="sphereTSA">Sphere (Total Surface Area)</option>
+                                    <option value="hemisphereVolume">Hemisphere (Volume)</option>
+                                    <option value="frustumVolume">Frustum (Volume)</option>
+                                    <option value="cubeTSA">Cube (Total Surface Area)</option>
+                                    <option value="cuboidVolume">Cuboid (Volume)</option>
+                                </select>
+                            </div>
+                            <div id="dynamicInputs"></div>
+                            <button class="sub-link" onclick="calculate()" style="background-color: var(--primary-color); color: var(--text-white); justify-content: center;">Calculate</button>
+                        </div>
+                    </div>
+
+                    <div id="resultBox" class="cat-card stagger-2" style="display: none;">
+                        <h3>Calculated Result</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link" style="flex-direction: column; align-items: center; background-color: var(--bg-main);">
+                                <span id="resValue" style="font-size: 2rem; font-weight: 700; color: var(--primary-color);">0</span>
+                                <span id="resUnit" style="color: var(--text-muted);">units</span>
+                            </div>
+                        </div>
+                         <div id="formula-display" style="text-align: center; margin-top: 10px; font-style: italic; color: var(--text-muted);"></div>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>SMART HUB | All Rights Reserved © 2025</p></footer>
+            </div>
+        </main>
+    </div>
+
+    <script src="../script.js"></script>
+    <script>
+        const PI = Math.PI;
+        const mensuration = {
+            coneVolume: { inputs: ['Radius (r)', 'Height (h)'], unit: 'cubic units', func: (r,h) => ({value: (1/3)*PI*r*r*h, formula:"(1/3)πr²h"})},
+            coneCSA: { inputs: ['Radius (r)', 'Slant Height (l)'], unit: 'sq units', func: (r,l) => ({value: PI*r*l, formula:"πrl"})},
+            sphereTSA: { inputs: ['Radius (r)'], unit: 'sq units', func: r => ({value: 4*PI*r*r, formula:"4πr²"})},
+            hemisphereVolume: { inputs: ['Radius (r)'], unit: 'cubic units', func: r => ({value: (2/3)*PI*r*r*r, formula:"(2/3)πr³"})},
+            frustumVolume: { inputs: ['Large Radius (R)', 'Small Radius (r)', 'Height (h)'], unit: 'cubic units', func: (R,r,h) => ({value: (1/3)*PI*h*(R*R + r*r + R*r), formula:"(1/3)πh(R²+r²+Rr)"})},
+            cubeTSA: { inputs: ['Side (a)'], unit: 'sq units', func: a => ({value: 6*a*a, formula:"6a²"})},
+            cuboidVolume: { inputs: ['Length (l)', 'Breadth (b)', 'Height (h)'], unit: 'cubic units', func: (l,b,h) => ({value: l*b*h, formula:"l*b*h"})}
+        };
+
+        function updateInputs() {
+            const shape = document.getElementById('shapeSelect').value;
+            const container = document.getElementById('dynamicInputs');
+            container.innerHTML = '';
+            
+            mensuration[shape].inputs.forEach((label, index) => {
+                container.innerHTML += `
+                    <div class="sub-link">
+                        <span>${label}</span>
+                        <input type="number" id="input${index}" class="form-control" placeholder="Enter value" min="0">
+                    </div>
+                `;
+            });
+            document.getElementById('resultBox').style.display = 'none';
+        }
+
+        function calculate() {
+            const shapeKey = document.getElementById('shapeSelect').value;
+            const shape = mensuration[shapeKey];
+            const inputs = shape.inputs.map((_, i) => parseFloat(document.getElementById(`input${i}`).value));
+
+            if (inputs.some(isNaN)) {
+                alert("Please enter valid positive numbers for all fields.");
+                return;
+            }
+
+            const result = shape.func(...inputs);
+            
+            document.getElementById('resValue').innerText = result.value.toFixed(2);
+            document.getElementById('resUnit').innerText = shape.unit;
+            document.getElementById('formula-display').innerText = `Formula: ${result.formula}`;
+            document.getElementById('resultBox').style.display = 'block';
+
+            // SAVE TO HISTORY
+            const inputDesc = shape.inputs.map((label, i) => `${label.split(' ')[0]}: ${inputs[i]}`).join(', ');
+            saveCalculation('Mensuration', `${shapeKey} (${inputDesc})`, `Result: ${result.value.toFixed(2)}`);
+        }
+
+        document.addEventListener('DOMContentLoaded', updateInputs);
+    </script>
+</body>
+</html>

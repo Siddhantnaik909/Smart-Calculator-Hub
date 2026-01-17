@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Word & Character Counter</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .stat-box {
+            background-color: var(--bg-main);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            text-align: center;
+            border: 1px solid var(--border-light);
+        }
+        .stat-box h4 {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+        .stat-box p {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-heading);
+            margin: 0;
+        }
+        textarea.form-control {
+            min-height: 250px;
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip"></i> SMART HUB
+            </div>
+            <nav class="side-menu">
+                <ul>
+                    <li><a href="../index.html"><i class="fa fa-home"></i> Dashboard</a></li>
+                    <li class="category">
+                        <div class="category-toggle"><i class="fa-solid fa-calculator"></i> Calculators <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                        <ul class="subcategory-list">
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Construction <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Construction/calc_concrete.html">Concrete</a></li>
+                                    <li><a href="../Construction/calc_flooring.html">Flooring</a></li>
+                                    <li><a href="../Construction/calc_fuel.html">Fuel Cost</a></li>
+                                    <li><a href="../Construction/calc_ohm.html">Ohm's Law</a></li>
+                                    <li><a href="../Construction/calc_paint.html">Paint</a></li>
+                                    <li><a href="../Construction/calc_wall_stud.html">Wall Stud</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Date & Time <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Date & Time/calc_age.html">Age</a></li>
+                                    <li><a href="../Date & Time/calc_countdown.html">Countdown</a></li>
+                                    <li><a href="../Date & Time/calc_date_diff.html">Date Difference</a></li>
+                                    <li><a href="../Date & Time/calc_leap_year.html">Leap Year</a></li>
+                                    <li><a href="../Date & Time/calc_time_add.html">Time Adder</a></li>
+                                    <li><a href="../Date & Time/calc_time_zone.html">Time Zone</a></li>
+                                    <li><a href="../Date & Time/calc_working_days.html">Working Days</a></li>
+                                    <li><a href="../Date & Time/calc_hours_worked.html">Hours Worked</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Finance <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Finance/calc_currency.html">Currency</a></li>
+                                    <li><a href="../Finance/calc_discount.html">Discount</a></li>
+                                    <li><a href="../Finance/calc_loan_emi.html">Loan EMI</a></li>
+                                    <li><a href="../Finance/calc_mortgage.html">Mortgage</a></li>
+                                    <li><a href="../Finance/calc_roi.html">ROI</a></li>
+                                    <li><a href="../Finance/calc_salary.html">Salary</a></li>
+                                    <li><a href="../Finance/calc_tax_gst.html">GST/Tax</a></li>
+                                    <li><a href="../Finance/tip_calculator.html">Tip</a></li>
+                                    <li><a href="../Finance/calc_compound.html">Compound Interest</a></li>
+                                    <li><a href="../Finance/calc_savings_goal.html">Savings Goal</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">General & Math <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../General & Math/calc_average.html">Average</a></li>
+                                    <li><a href="../General & Math/calc_fractions.html">Fractions</a></li>
+                                    <li><a href="../General & Math/calc_percentage.html">Percentage</a></li>
+                                    <li><a href="../General & Math/calc_programmer.html">Programmer</a></li>
+                                    <li><a href="../General & Math/calc_scientific.html">Scientific</a></li>
+                                    <li><a href="../General & Math/calc_standard.html">Standard</a></li>
+                                    <li><a href="../General & Math/tool_password.html">Password Generator</a></li>
+                                    <li><a href="../General & Math/calc_math_toolkit.html">Math Toolkit</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Health & Fitness <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Health & Fitness/calc_bmi.html">BMI</a></li>
+                                    <li><a href="../Health & Fitness/calc_bmr.html">BMR</a></li>
+                                    <li><a href="../Health & Fitness/calc_body_fat.html">Body Fat</a></li>
+                                    <li><a href="../Health & Fitness/calc_ovulation.html">Ovulation</a></li>
+                                    <li><a href="../Health & Fitness/calc_pregnancy.html">Pregnancy</a></li>
+                                    <li><a href="../Health & Fitness/calc_water.html">Water Intake</a></li>
+                                    <li><a href="../Health & Fitness/calc_calorie.html">Daily Calorie</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Students <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Students/calc_gpa.html">GPA</a></li>
+                                    <li><a href="../Students/calc_unit_conv.html">Unit Converter</a></li>
+                                    <li><a href="../Students/calc_grade_weighted.html">Weighted Grade</a></li>
+                                    <li><a href="../Students/calc_quadratic.html">Quadratic Solver</a></li>
+                                    <li><a href="../Students/calc_pomodoro.html">Pomodoro Timer</a></li>
+                                    <li><a href="../Students/calc_statistics.html">Statistics Tool</a></li>
+                                    <li><a href="../Students/calc_geometry.html">Geometry</a></li>
+                                    <li><a href="../Students/calc_mensuration.html">Mensuration</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Text & Web Utilities <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Text & Web Utilities/tool_word_counter.html">Word Counter</a></li>
+                                    <li><a href="../Text & Web Utilities/tool_case_converter.html">Case Converter</a></li>
+                                    <li><a href="../Text & Web Utilities/tool_lorem_ipsum.html">Lorem Ipsum</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="../history.html"><i class="fa fa-history"></i> History</a></li>
+                    <li><a href="../settings.html"><i class="fa fa-gear"></i> Settings</a></li>
+                    <li><a href="../about.html"><i class="fa fa-circle-info"></i> About</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer"><p>© 2025 Smart Hub Products.</p></div>
+        </aside>
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Word & Character Counter</h1>
+            </header>
+            <div class="page-body">
+                <section class="container fade-in delay-1">
+                    <div class="cat-card stagger-1">
+                        <h3>Your Text</h3>
+                        <div class="sub-cat-list">
+                            <textarea id="textInput" class="form-control" placeholder="Start typing or paste your text here..." oninput="updateCounts()"></textarea>
+                             <button class="sub-link" onclick="clearText()" style="background-color: var(--accent-red); color: var(--text-white); justify-content: center; margin-top: 1rem;">
+                                <i class="fa-solid fa-trash" style="margin-right: 8px;"></i> Clear Text
+                            </button>
+                        </div>
+                    </div>
+                     <div class="cat-card stagger-2">
+                        <h3>Statistics</h3>
+                        <div class="stat-grid">
+                            <div class="stat-box"><h4 >Words</h4><p id="wordCount">0</p></div>
+                            <div class="stat-box"><h4>Characters</h4><p id="charCount">0</p></div>
+                            <div class="stat-box"><h4>Sentences</h4><p id="sentenceCount">0</p></div>
+                            <div class="stat-box"><h4>Paragraphs</h4><p id="paragraphCount">0</p></div>
+                        </div>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>SMART HUB | All Rights Reserved © 2025</p></footer>
+            </div>
+        </main>
+    </div>
+    <script src="../script.js"></script>
+    <script>
+        const textInput = document.getElementById('textInput');
+        const wordCountEl = document.getElementById('wordCount');
+        const charCountEl = document.getElementById('charCount');
+        const sentenceCountEl = document.getElementById('sentenceCount');
+        const paragraphCountEl = document.getElementById('paragraphCount');
+
+        function updateCounts() {
+            const text = textInput.value;
+
+            // Word Count
+            const words = text.match(/\b\w+\b/g) || [];
+            wordCountEl.textContent = words.length;
+
+            // Character Count
+            charCountEl.textContent = text.length;
+            
+            // Sentence Count (approximate)
+            const sentences = text.split(/[.!?]+/).filter(Boolean);
+            sentenceCountEl.textContent = sentences.length > 0 && text.trim().length > 0 ? sentences.length : 0;
+            
+            // Paragraph Count
+            const paragraphs = text.split(/\n+/).filter(p => p.trim().length > 0);
+            paragraphCountEl.textContent = paragraphs.length;
+        }
+
+        function clearText() {
+            textInput.value = "";
+            updateCounts();
+        }
+
+        // Initial count
+        updateCounts();
+    </script>
+</body>
+</html>

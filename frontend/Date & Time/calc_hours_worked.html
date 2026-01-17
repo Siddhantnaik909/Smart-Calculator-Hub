@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Hours Worked Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip"></i> SMART HUB
+            </div>
+            <nav class="side-menu">
+                <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+                <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+                <a href="../history.html"><i class="fa fa-history"></i> History</a>
+                <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+                <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+            </nav>
+            <div class="sidebar-footer"><p>© 2025 Smart Hub Products.</p></div>
+        </aside>
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Hours Worked Calculator</h1>
+            </header>
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1">
+                        <h3>Time Sheet</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>Start Time</span>
+                                <input type="time" id="startTime" class="form-control" value="09:00">
+                            </div>
+                            <div class="sub-link">
+                                <span>End Time</span>
+                                <input type="time" id="endTime" class="form-control" value="17:30">
+                            </div>
+                             <div class="sub-link">
+                                <span>Break (minutes)</span>
+                                <input type="number" id="breakTime" class="form-control" placeholder="e.g., 30" value="30" min="0">
+                            </div>
+                            <button class="sub-link" onclick="calculateHours()" style="background-color: var(--primary-color); color: var(--text-white); justify-content: center;">Calculate Hours</button>
+                        </div>
+                    </div>
+
+                    <div id="resultBox" class="cat-card stagger-2" style="display: none;">
+                        <h3>Total Work Duration</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link" style="flex-direction: column; align-items: center; background-color: var(--bg-main);">
+                                <span id="resHours" style="font-size: 2rem; font-weight: 700; color: var(--primary-color);">0h 0m</span>
+                            </div>
+                             <div class="sub-link">
+                                <span>In Decimal Format</span>
+                                <span id="resDecimal" style="font-weight: 600;">0.00 hours</span>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="cat-card stagger-3">
+                        <h3><i class="fa-solid fa-business-time" style="color: var(--accent-cyan);"></i> Time Card Insights</h3>
+                        <div style="font-size: 0.9rem; color: var(--text-body); line-height: 1.6;">
+                            <p style="margin-bottom: 8px;"><strong>What:</strong> This tool calculates the total time elapsed between a start and end time, minus any specified break time.</p>
+                            <p style="margin-bottom: 8px;"><strong>Why:</strong> It's perfect for filling out time sheets, tracking work hours, or managing project time.</p>
+                             <div style="background: rgba(6, 182, 212, 0.1); padding: 15px; border-radius: 8px; border-left: 4px solid var(--accent-cyan);">
+                                <strong>💡 Smart Tip:</strong> <br>
+                                The decimal format is useful for payroll calculations where an hourly rate is multiplied by the hours worked.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>SMART HUB | All Rights Reserved © 2025</p></footer>
+            </div>
+        </main>
+    </div>
+    <script src="../script.js"></script>
+    <script>
+        function calculateHours() {
+            const startTimeInput = document.getElementById('startTime');
+            const endTimeInput = document.getElementById('endTime');
+            const breakMinutes = parseInt(document.getElementById('breakTime').value, 10) || 0;
+
+            if (!startTimeInput.value || !endTimeInput.value) {
+                alert("Please select a start and end time.");
+                return;
+            }
+
+            // Create date objects. The date itself doesn't matter, only the time.
+            const startDate = new Date(`2025-01-01T${startTimeInput.value}`);
+            const endDate = new Date(`2025-01-01T${endTimeInput.value}`);
+
+            // Handle overnight shifts
+            if (endDate < startDate) {
+                endDate.setDate(endDate.getDate() + 1);
+            }
+
+            let diffMillis = endDate - startDate;
+
+            // Subtract break time
+            const breakMillis = breakMinutes * 60 * 1000;
+            diffMillis -= breakMillis;
+
+            if (diffMillis < 0) {
+                alert("Break time cannot be longer than the total work duration.");
+                return;
+            }
+
+            const totalMinutes = diffMillis / (1000 * 60);
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = Math.round(totalMinutes % 60);
+            
+            const decimalHours = totalMinutes / 60;
+
+            document.getElementById('resHours').innerText = `${hours}h ${minutes}m`;
+            document.getElementById('resDecimal').innerText = `${decimalHours.toFixed(2)} hours`;
+            document.getElementById('resultBox').style.display = 'block';
+
+            // SAVE TO HISTORY
+            saveCalculation('Hours Worked', `${startTimeInput.value} - ${endTimeInput.value}`, `${hours}h ${minutes}m`);
+        }
+    </script>
+</body>
+</html>

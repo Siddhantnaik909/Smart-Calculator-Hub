@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Authenticating...</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        // Apply theme immediately to prevent flash of unstyled content (FOUC)
+        (function() {
+            const theme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (theme === 'dark' || (!theme && prefersDark)) {
+                document.documentElement.classList.add('dark-mode');
+            }
+        })();
+    </script>
+</head>
+<body class="auth-body">
+    <div class="auth-card fade-in">
+        <div class="auth-logo">
+            <i class="fa-solid fa-spinner fa-spin" style="color: var(--primary-color);"></i>
+        </div>
+        <h2 style="font-size: 1.5rem; color: var(--text-heading); margin-top: 20px;">Please wait...</h2>
+        <p style="color: var(--text-body);">We're securely finalizing your login.</p>
+        <div id="error-msg" class="error-msg" style="display: none; margin-top: 20px;"></div>
+    </div>
+    <script>
+        (async function() {
+            const errorMsg = document.getElementById('error-msg');
+            const API_URL = 'http://localhost:5000';
+
+            try {
+                const params = new URLSearchParams(window.location.search);
+                const token = params.get('token');
+
+                if (!token) {
+                    throw new Error('Authentication token not found in URL.');
+                }
+
+                // 1. Save the token to local storage
+                localStorage.setItem('token', token);
+
+                // 2. Fetch the user's profile from the protected /api/auth/me endpoint
+                const res = await fetch(`${API_URL}/api/auth/me`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!res.ok) {
+                    const errorData = await res.json();
+                    throw new Error(errorData.error || 'Could not retrieve your user profile.');
+                }
+
+                const user = await res.json();
+
+                // 3. Save the retrieved user info and set login status flag
+                localStorage.setItem('user', JSON.stringify(user));
+                localStorage.setItem('isLoggedIn', 'true');
+
+                // 4. Redirect to the main dashboard
+                window.location.href = 'index.html';
+
+            } catch (err) {
+                console.error('Authentication callback error:', err);
+                errorMsg.innerText = err.message || 'An unknown authentication error occurred.';
+                errorMsg.style.display = 'block';
+                
+                // Redirect back to login page after showing the error for a few seconds
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 4000);
+            }
+        })();
+    </script>
+</body>
+</html>

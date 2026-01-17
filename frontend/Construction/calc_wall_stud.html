@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Wall Stud Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip"></i> SMART HUB
+            </div>
+            <nav class="side-menu">
+                <a href="../index.html"><i class="fa fa-home"></i> Dashboard</a>
+                <a href="../calculators.html" class="active"><i class="fa-solid fa-calculator"></i> Calculators</a>
+                <a href="../history.html"><i class="fa fa-history"></i> History</a>
+                <a href="../settings.html"><i class="fa fa-gear"></i> Settings</a>
+                <a href="../about.html"><i class="fa fa-circle-info"></i> About</a>
+            </nav>
+            <div class="sidebar-footer"><p>© 2025 Smart Hub Products.</p></div>
+        </aside>
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Wall Stud Calculator</h1>
+            </header>
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1">
+                        <h3>Wall Details</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>Wall Length</span>
+                                <input type="number" id="wallLength" class="form-control" placeholder="e.g., 20" min="0">
+                            </div>
+                            <div class="sub-link">
+                                <span>Units</span>
+                                <select id="units" class="form-control">
+                                    <option value="feet">Feet</option>
+                                    <option value="inches">Inches</option>
+                                    <option value="meters">Meters</option>
+                                </select>
+                            </div>
+                             <div class="sub-link">
+                                <span>Stud Spacing</span>
+                                <select id="spacing" class="form-control">
+                                    <option value="16">16 inches</option>
+                                    <option value="24">24 inches</option>
+                                    <option value="12">12 inches</option>
+                                </select>
+                            </div>
+                            <button class="sub-link" onclick="calculateStuds()" style="background-color: var(--primary-color); color: var(--text-white); justify-content: center;">Calculate Studs</button>
+                        </div>
+                    </div>
+
+                    <div id="resultBox" class="cat-card stagger-2" style="display: none;">
+                        <h3>Total Studs Needed</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link" style="flex-direction: column; align-items: center; background-color: var(--bg-main);">
+                                <span id="resValue" style="font-size: 2rem; font-weight: 700; color: var(--primary-color);">0</span>
+                                <span style="color: var(--text-muted);">Studs</span>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="cat-card stagger-3">
+                        <h3><i class="fa-solid fa-ruler-combined" style="color: var(--primary-color);"></i> Stud Calculation Insights</h3>
+                        <div style="font-size: 0.9rem; color: var(--text-body); line-height: 1.6;">
+                            <p style="margin-bottom: 8px;"><strong>What:</strong> This tool estimates the number of vertical studs required to frame a single, straight wall.</p>
+                            <p style="margin-bottom: 8px;"><strong>How:</strong> It uses a common builder's formula: one stud per foot for 16" spacing is a good estimate, but a more precise formula is used here.</p>
+                             <div style="background: var(--primary-light); padding: 15px; border-radius: 8px; border-left: 4px solid var(--primary-color);">
+                                <strong>💡 Smart Tip:</strong> <br>
+                                The calculation <strong>(Length / Spacing) + 1</strong> is a standard estimation. Always buy a few extra studs to account for corners, window/door frames, and waste.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>SMART HUB | All Rights Reserved © 2025</p></footer>
+            </div>
+        </main>
+    </div>
+    <script src="../script.js"></script>
+    <script>
+        function calculateStuds() {
+            const lengthInput = document.getElementById('wallLength');
+            const units = document.getElementById('units').value;
+            const spacing = parseInt(document.getElementById('spacing').value, 10);
+            
+            let length = parseFloat(lengthInput.value);
+
+            if (!length || length <= 0) {
+                alert("Please enter a valid wall length.");
+                lengthInput.focus();
+                return;
+            }
+
+            // Convert all length to inches for a consistent calculation
+            let lengthInInches = 0;
+            if (units === 'feet') {
+                lengthInInches = length * 12;
+            } else if (units === 'meters') {
+                lengthInInches = length * 39.37;
+            } else {
+                lengthInInches = length;
+            }
+            
+            // The formula is (length / spacing) + 1, rounded up.
+            // This accounts for one stud at the start of each interval, plus one for the very end of the wall.
+            const studsNeeded = Math.ceil(lengthInInches / spacing) + 1;
+
+            document.getElementById('resValue').innerText = studsNeeded;
+            document.getElementById('resultBox').style.display = 'block';
+
+            // SAVE TO HISTORY
+            saveCalculation('Wall Studs', `Length: ${length} ${units}, Spacing: ${spacing}"`, `Studs: ${studsNeeded}`);
+        }
+    </script>
+</body>
+</html>

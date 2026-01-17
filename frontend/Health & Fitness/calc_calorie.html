@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SMART HUB | Daily Calorie Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+    <div class="dashboard-layout" id="dashboard-wrapper">
+        <div class="overlay" id="mobile-overlay"></div>
+
+        <aside class="sidebar">
+            <div class="brand-block">
+                <i class="fa-solid fa-microchip"></i> SMART HUB
+            </div>
+            <nav class="side-menu">
+                <ul>
+                    <li><a href="../index.html"><i class="fa fa-home"></i> Dashboard</a></li>
+                    <li class="category">
+                        <div class="category-toggle"><i class="fa-solid fa-calculator"></i> Calculators <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                        <ul class="subcategory-list">
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Construction <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Construction/calc_concrete.html">Concrete</a></li>
+                                    <li><a href="../Construction/calc_flooring.html">Flooring</a></li>
+                                    <li><a href="../Construction/calc_fuel.html">Fuel Cost</a></li>
+                                    <li><a href="../Construction/calc_ohm.html">Ohm's Law</a></li>
+                                    <li><a href="../Construction/calc_paint.html">Paint</a></li>
+                                    <li><a href="../Construction/calc_wall_stud.html">Wall Stud</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Date & Time <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Date & Time/calc_age.html">Age</a></li>
+                                    <li><a href="../Date & Time/calc_countdown.html">Countdown</a></li>
+                                    <li><a href="../Date & Time/calc_date_diff.html">Date Difference</a></li>
+                                    <li><a href="../Date & Time/calc_leap_year.html">Leap Year</a></li>
+                                    <li><a href="../Date & Time/calc_time_add.html">Time Adder</a></li>
+                                    <li><a href="../Date & Time/calc_time_zone.html">Time Zone</a></li>
+                                    <li><a href="../Date & Time/calc_working_days.html">Working Days</a></li>
+                                    <li><a href="../Date & Time/calc_hours_worked.html">Hours Worked</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Finance <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Finance/calc_currency.html">Currency</a></li>
+                                    <li><a href="../Finance/calc_discount.html">Discount</a></li>
+                                    <li><a href="../Finance/calc_loan_emi.html">Loan EMI</a></li>
+                                    <li><a href="../Finance/calc_mortgage.html">Mortgage</a></li>
+                                    <li><a href="../Finance/calc_roi.html">ROI</a></li>
+                                    <li><a href="../Finance/calc_salary.html">Salary</a></li>
+                                    <li><a href="../Finance/calc_tax_gst.html">GST/Tax</a></li>
+                                    <li><a href="../Finance/tip_calculator.html">Tip</a></li>
+                                    <li><a href="../Finance/calc_compound.html">Compound Interest</a></li>
+                                    <li><a href="../Finance/calc_savings_goal.html">Savings Goal</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">General & Math <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../General & Math/calc_average.html">Average</a></li>
+                                    <li><a href="../General & Math/calc_fractions.html">Fractions</a></li>
+                                    <li><a href="../General & Math/calc_percentage.html">Percentage</a></li>
+                                    <li><a href="../General & Math/calc_programmer.html">Programmer</a></li>
+                                    <li><a href="../General & Math/calc_scientific.html">Scientific</a></li>
+                                    <li><a href="../General & Math/calc_standard.html">Standard</a></li>
+                                    <li><a href="../General & Math/tool_password.html">Password Generator</a></li>
+                                    <li><a href="../General & Math/calc_math_toolkit.html">Math Toolkit</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Health & Fitness <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Health & Fitness/calc_bmi.html">BMI</a></li>
+                                    <li><a href="../Health & Fitness/calc_bmr.html">BMR</a></li>
+                                    <li><a href="../Health & Fitness/calc_body_fat.html">Body Fat</a></li>
+                                    <li><a href="../Health & Fitness/calc_ovulation.html">Ovulation</a></li>
+                                    <li><a href="../Health & Fitness/calc_pregnancy.html">Pregnancy</a></li>
+                                    <li><a href="../Health & Fitness/calc_water.html">Water Intake</a></li>
+                                    <li><a href="../Health & Fitness/calc_calorie.html">Daily Calorie</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Students <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Students/calc_gpa.html">GPA</a></li>
+                                    <li><a href="../Students/calc_unit_conv.html">Unit Converter</a></li>
+                                    <li><a href="../Students/calc_grade_weighted.html">Weighted Grade</a></li>
+                                    <li><a href="../Students/calc_quadratic.html">Quadratic Solver</a></li>
+                                    <li><a href="../Students/calc_pomodoro.html">Pomodoro Timer</a></li>
+                                    <li><a href="../Students/calc_statistics.html">Statistics Tool</a></li>
+                                    <li><a href="../Students/calc_geometry.html">Geometry</a></li>
+                                    <li><a href="../Students/calc_mensuration.html">Mensuration</a></li>
+                                </ul>
+                            </li>
+                            <li class="subcategory">
+                                <div class="subcategory-toggle">Text & Web Utilities <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                                <ul class="item-list">
+                                    <li><a href="../Text & Web Utilities/tool_word_counter.html">Word Counter</a></li>
+                                    <li><a href="../Text & Web Utilities/tool_case_converter.html">Case Converter</a></li>
+                                    <li><a href="../Text & Web Utilities/tool_lorem_ipsum.html">Lorem Ipsum</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="../history.html"><i class="fa fa-history"></i> History</a></li>
+                    <li><a href="../settings.html"><i class="fa fa-gear"></i> Settings</a></li>
+                    <li><a href="../about.html"><i class="fa fa-circle-info"></i> About</a></li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer"><p>© 2025 Smart Hub Products.</p></div>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                 <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+                <h1 class="fade-in">Daily Calorie Calculator</h1>
+            </header>
+
+            <div class="page-body">
+                <section class="container grid-section fade-in delay-1">
+                    <div class="cat-card stagger-1">
+                        <h3>Your Personal Stats</h3>
+                        <div class="sub-cat-list">
+                            <div class="sub-link">
+                                <span>Gender</span>
+                                <select id="gender" class="form-control">
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                            <div class="sub-link"><span>Age</span><input type="number" id="age" class="form-control" placeholder="e.g. 28"></div>
+                            <div class="sub-link"><span>Height (cm)</span><input type="number" id="height" class="form-control" placeholder="e.g. 175"></div>
+                            <div class="sub-link"><span>Weight (kg)</span><input type="number" id="weight" class="form-control" placeholder="e.g. 72"></div>
+                            <button onclick="calculateCalories()" class="sub-link" style="justify-content: center; background-color: var(--primary-color); color: white;">Calculate</button>
+                        </div>
+                    </div>
+
+                    <div class="cat-card stagger-2">
+                        <h3>Your Activity Level</h3>
+                        <div id="activity-levels" class="sub-cat-list">
+                            <label class="sub-link-radio"><input type="radio" name="activity" value="1.2" checked><div><strong>Sedentary</strong><p>Little or no exercise</p></div></label>
+                            <label class="sub-link-radio"><input type="radio" name="activity" value="1.375"><div><strong>Lightly Active</strong><p>Light exercise/sports 1-3 days/week</p></div></label>
+                            <label class="sub-link-radio"><input type="radio" name="activity" value="1.55"><div><strong>Moderately Active</strong><p>Moderate exercise/sports 3-5 days/week</p></div></label>
+                            <label class="sub-link-radio"><input type="radio" name="activity" value="1.725"><div><strong>Very Active</strong><p>Hard exercise/sports 6-7 days a week</p></div></label>
+                            <label class="sub-link-radio"><input type="radio" name="activity" value="1.9"><div><strong>Extra Active</strong><p>Very hard exercise & physical job</p></div></label>
+                        </div>
+                    </div>
+
+                    <div id="resultBox" class="cat-card stagger-3" style="display: none;">
+                        <h3>Your Daily Calorie Goals</h3>
+                        <div class="sub-cat-list">
+                             <div class="sub-link" style="background-color: var(--bg-main); flex-direction: column; align-items: start; padding: 15px;">
+                                <h4 style="margin: 0; font-size: 1rem; color: var(--primary-color);">Maintenance</h4>
+                                <p style="margin: 0; font-size: 1.5rem; font-weight: 700;" id="resMaintenance">0 kcal</p>
+                            </div>
+                             <div class="sub-link" style="flex-direction: column; align-items: start;">
+                                <h4 style="margin: 0; font-size: 1rem; color: var(--accent-green);">Weight Loss</h4>
+                                <p style="margin: 5px 0 0 0;"><strong>Mild (0.25kg/wk):</strong> <span id="lossMild">0</span> kcal</p>
+                                <p style="margin: 5px 0 0 0;"><strong>Normal (0.5kg/wk):</strong> <span id="lossNormal">0</span> kcal</p>
+                            </div>
+                             <div class="sub-link" style="flex-direction: column; align-items: start;">
+                                <h4 style="margin: 0; font-size: 1rem; color: var(--accent-orange);">Weight Gain</h4>
+                                <p style="margin: 5px 0 0 0;"><strong>Mild (0.25kg/wk):</strong> <span id="gainMild">0</span> kcal</p>
+                                <p style="margin: 5px 0 0 0;"><strong>Normal (0.5kg/wk):</strong> <span id="gainNormal">0</span> kcal</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <footer class="content-footer"><p>SMART HUB | All Rights Reserved © 2025</p></footer>
+            </div>
+        </main>
+    </div>
+    
+    <style>
+        .sub-link-radio { display: flex; align-items: center; padding: 14px; border-radius: var(--radius-md); background: var(--bg-hover); margin-bottom: 8px; cursor: pointer; transition: all .2s ease; border: 2px solid transparent;}
+        .sub-link-radio:hover { border-color: var(--primary-color); transform: translateX(5px); }
+        .sub-link-radio input { margin-right: 15px; width: 18px; height: 18px; accent-color: var(--primary-color); }
+        .sub-link-radio p { font-size: 0.8rem; color: var(--text-muted); margin: 0; }
+    </style>
+    <script src="../script.js"></script>
+    <script>
+        function calculateCalories() {
+            const gender = document.getElementById('gender').value;
+            const age = parseFloat(document.getElementById('age').value);
+            const w = parseFloat(document.getElementById('weight').value);
+            const h = parseFloat(document.getElementById('height').value);
+            const activityNode = document.querySelector('input[name="activity"]:checked');
+
+            if(!age || !w || !h || !activityNode) { alert("Please fill in all fields."); return; }
+            
+            const act = parseFloat(activityNode.value);
+
+            // Mifflin-St Jeor Equation for BMR
+            let bmr = (10 * w) + (6.25 * h) - (5 * age);
+            bmr += (gender === 'male') ? 5 : -161;
+
+            const maintenance = Math.round(bmr * act);
+
+            // Populate results
+            document.getElementById('resMaintenance').innerText = `${maintenance} kcal`;
+            document.getElementById('lossMild').innerText = `${maintenance - 250} kcal`;
+            document.getElementById('lossNormal').innerText = `${maintenance - 500} kcal`;
+            document.getElementById('gainMild').innerText = `${maintenance + 250} kcal`;
+            document.getElementById('gainNormal').innerText = `${maintenance + 500} kcal`;
+
+            document.getElementById('resultBox').style.display = 'block';
+
+            // SAVE TO HISTORY
+            saveCalculation('Calorie Calc', `A:${age}, W:${w}kg, H:${h}cm`, `Maintain: ${maintenance} kcal`);
+        }
+    </script>
+</body>
+</html>

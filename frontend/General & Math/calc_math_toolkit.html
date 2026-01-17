@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SMART HUB | Math Toolkit</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        .calculator { display: none; }
+        .calculator.active { display: block; }
+    </style>
+</head>
+<body>
+<div class="dashboard-layout" id="dashboard-wrapper">
+    <aside class="sidebar">
+        <div class="brand-block">
+            <i class="fa-solid fa-microchip" style="color:var(--primary-color);margin-right:10px"></i>
+            SMART HUB
+        </div>
+        <nav class="side-menu">
+            <ul>
+                <li><a href="../index.html"><i class="fa fa-home"></i> Dashboard</a></li>
+                <li class="category">
+                    <div class="category-toggle"><i class="fa-solid fa-calculator"></i> Calculators <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                    <ul class="subcategory-list">
+                        <li class="subcategory">
+                            <div class="subcategory-toggle">Construction <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                            <ul class="item-list">
+                                <li><a href="../Construction/calc_concrete.html">Concrete</a></li>
+                                <li><a href="../Construction/calc_flooring.html">Flooring</a></li>
+                                <li><a href="../Construction/calc_fuel.html">Fuel Cost</a></li>
+                                <li><a href="../Construction/calc_ohm.html">Ohm's Law</a></li>
+                                <li><a href="../Construction/calc_paint.html">Paint</a></li>
+                                <li><a href="../Construction/calc_wall_stud.html">Wall Stud</a></li>
+                            </ul>
+                        </li>
+                        <li class="subcategory">
+                            <div class="subcategory-toggle">Date & Time <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                            <ul class="item-list">
+                                <li><a href="../Date & Time/calc_age.html">Age</a></li>
+                                <li><a href="../Date & Time/calc_countdown.html">Countdown</a></li>
+                                <li><a href="../Date & Time/calc_date_diff.html">Date Difference</a></li>
+                                <li><a href="../Date & Time/calc_leap_year.html">Leap Year</a></li>
+                                <li><a href="../Date & Time/calc_time_add.html">Time Adder</a></li>
+                                <li><a href="../Date & Time/calc_time_zone.html">Time Zone</a></li>
+                                <li><a href="../Date & Time/calc_working_days.html">Working Days</a></li>
+                                <li><a href="../Date & Time/calc_hours_worked.html">Hours Worked</a></li>
+                            </ul>
+                        </li>
+                        <li class="subcategory">
+                            <div class="subcategory-toggle">Finance <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                            <ul class="item-list">
+                                <li><a href="../Finance/calc_currency.html">Currency</a></li>
+                                <li><a href="../Finance/calc_discount.html">Discount</a></li>
+                                <li><a href="../Finance/calc_loan_emi.html">Loan EMI</a></li>
+                                <li><a href="../Finance/calc_mortgage.html">Mortgage</a></li>
+                                <li><a href="../Finance/calc_roi.html">ROI</a></li>
+                                <li><a href="../Finance/calc_salary.html">Salary</a></li>
+                                <li><a href="../Finance/calc_tax_gst.html">GST/Tax</a></li>
+                                <li><a href="../Finance/tip_calculator.html">Tip</a></li>
+                                <li><a href="../Finance/calc_compound.html">Compound Interest</a></li>
+                                <li><a href="../Finance/calc_savings_goal.html">Savings Goal</a></li>
+                            </ul>
+                        </li>
+                        <li class="subcategory">
+                            <div class="subcategory-toggle">General & Math <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                            <ul class="item-list">
+                                <li><a href="../General & Math/calc_average.html">Average</a></li>
+                                <li><a href="../General & Math/calc_fractions.html">Fractions</a></li>
+                                <li><a href="../General & Math/calc_percentage.html">Percentage</a></li>
+                                <li><a href="../General & Math/calc_programmer.html">Programmer</a></li>
+                                <li><a href="../General & Math/calc_scientific.html">Scientific</a></li>
+                                <li><a href="../General & Math/calc_standard.html">Standard</a></li>
+                                <li><a href="../General & Math/tool_password.html">Password Generator</a></li>
+                                <li><a href="../General & Math/calc_math_toolkit.html">Math Toolkit</a></li>
+                            </ul>
+                        </li>
+                        <li class="subcategory">
+                            <div class="subcategory-toggle">Health & Fitness <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                            <ul class="item-list">
+                                <li><a href="../Health & Fitness/calc_bmi.html">BMI</a></li>
+                                <li><a href="../Health & Fitness/calc_bmr.html">BMR</a></li>
+                                <li><a href="../Health & Fitness/calc_body_fat.html">Body Fat</a></li>
+                                <li><a href="../Health & Fitness/calc_ovulation.html">Ovulation</a></li>
+                                <li><a href="../Health & Fitness/calc_pregnancy.html">Pregnancy</a></li>
+                                <li><a href="../Health & Fitness/calc_water.html">Water Intake</a></li>
+                                <li><a href="../Health & Fitness/calc_calorie.html">Daily Calorie</a></li>
+                            </ul>
+                        </li>
+                        <li class="subcategory">
+                            <div class="subcategory-toggle">Students <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                            <ul class="item-list">
+                                <li><a href="../Students/calc_gpa.html">GPA</a></li>
+                                <li><a href="../Students/calc_unit_conv.html">Unit Converter</a></li>
+                                <li><a href="../Students/calc_grade_weighted.html">Weighted Grade</a></li>
+                                <li><a href="../Students/calc_quadratic.html">Quadratic Solver</a></li>
+                                <li><a href="../Students/calc_pomodoro.html">Pomodoro Timer</a></li>
+                                <li><a href="../Students/calc_statistics.html">Statistics Tool</a></li>
+                                <li><a href="../Students/calc_geometry.html">Geometry</a></li>
+                                <li><a href="../Students/calc_mensuration.html">Mensuration</a></li>
+                            </ul>
+                        </li>
+                        <li class="subcategory">
+                            <div class="subcategory-toggle">Text & Web Utilities <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span></div>
+                            <ul class="item-list">
+                                <li><a href="../Text & Web Utilities/tool_word_counter.html">Word Counter</a></li>
+                                <li><a href="../Text & Web Utilities/tool_case_converter.html">Case Converter</a></li>
+                                <li><a href="../Text & Web Utilities/tool_lorem_ipsum.html">Lorem Ipsum</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><a href="../history.html"><i class="fa fa-history"></i> History</a></li>
+                <li><a href="../settings.html"><i class="fa fa-gear"></i> Settings</a></li>
+                <li><a href="../about.html"><i class="fa fa-circle-info"></i> About</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="content-header">
+            <div class="mobile-toggle" id="mobile-toggle-btn"><i class="fa fa-bars"></i></div>
+            <h1>Math Toolkit</h1>
+        </header>
+
+        <section class="container grid-section">
+            <div class="cat-card stagger-1">
+                <h3>Select Tool</h3>
+                <select id="toolSelector" class="form-control">
+                    <option value="linear">Linear Equation Solver</option>
+                    <option value="simultaneous">Simultaneous 2x2 Solver</option>
+                    <option value="distance">Distance Formula</option>
+                    <option value="midpoint">Midpoint Formula</option>
+                    <option value="triangleArea">Triangle Area (Coords)</option>
+                    <option value="fracToPct">Fraction to Percentage</option>
+                    <option value="pctToFrac">Percentage to Fraction</option>
+                </select>
+            </div>
+
+            <div id="calculators-container" class="cat-card stagger-2">
+                <!-- Linear Equation Solver -->
+                <div id="linear" class="calculator active">
+                    <h3>Linear Equation (ax + b = 0)</h3>
+                    <div class="sub-cat-list" style="flex-direction:row; gap:10px;">
+                        <input id="linear-a" class="form-control" type="number" placeholder="a">
+                        <input id="linear-b" class="form-control" type="number" placeholder="b">
+                    </div>
+                    <button onclick="calculate()" class="sub-link" style="background:var(--primary-color); color:white; justify-content:center;">Solve</button>
+                </div>
+
+                <!-- Simultaneous Equation Solver -->
+                <div id="simultaneous" class="calculator">
+                    <h3>2x2 Simultaneous Equations</h3>
+                    <p>a1x + b1y = c1</p>
+                    <p>a2x + b2y = c2</p>
+                    <div class="sub-cat-list" style="flex-direction:row; gap:10px;">
+                        <input id="sim-a1" type="number" placeholder="a1" class="form-control">
+                        <input id="sim-b1" type="number" placeholder="b1" class="form-control">
+                        <input id="sim-c1" type="number" placeholder="c1" class="form-control">
+                    </div>
+                    <div class="sub-cat-list" style="flex-direction:row; gap:10px; margin-top:10px;">
+                        <input id="sim-a2" type="number" placeholder="a2" class="form-control">
+                        <input id="sim-b2" type="number" placeholder="b2" class="form-control">
+                        <input id="sim-c2" type="number" placeholder="c2" class="form-control">
+                    </div>
+                    <button onclick="calculate()" class="sub-link" style="background:var(--primary-color); color:white; justify-content:center; margin-top:10px;">Solve</button>
+                </div>
+
+                <!-- Distance Formula -->
+                <div id="distance" class="calculator">
+                    <h3>Distance Formula</h3>
+                    <div class="sub-cat-list" style="flex-direction:row; gap:10px;">
+                        <input id="dist-x1" type="number" placeholder="x1" class="form-control">
+                        <input id="dist-y1" type="number" placeholder="y1" class="form-control">
+                    </div>
+                    <div class="sub-cat-list" style="flex-direction:row; gap:10px; margin-top:10px;">
+                        <input id="dist-x2" type="number" placeholder="x2" class="form-control">
+                        <input id="dist-y2" type="number" placeholder="y2" class="form-control">
+                    </div>
+                    <button onclick="calculate()" class="sub-link" style="background:var(--primary-color); color:white; justify-content:center; margin-top:10px;">Calculate</button>
+                </div>
+
+                <!-- Midpoint Formula -->
+                <div id="midpoint" class="calculator">
+                    <h3>Midpoint Formula</h3>
+                    <div class="sub-cat-list" style="flex-direction:row; gap:10px;">
+                        <input id="mid-x1" type="number" placeholder="x1" class="form-control">
+                        <input id="mid-y1" type="number" placeholder="y1" class="form-control">
+                    </div>
+                    <div class="sub-cat-list" style="flex-direction:row; gap:10px; margin-top:10px;">
+                        <input id="mid-x2" type="number" placeholder="x2" class="form-control">
+                        <input id="mid-y2" type="number" placeholder="y2" class="form-control">
+                    </div>
+                    <button onclick="calculate()" class="sub-link" style="background:var(--primary-color); color:white; justify-content:center; margin-top:10px;">Calculate</button>
+                </div>
+                
+                <!-- Triangle Area from Coords -->
+                <div id="triangleArea" class="calculator">
+                    <h3>Triangle Area (from Coords)</h3>
+                    <div class="sub-cat-list" style="flex-direction:row; gap:10px;">
+                        <input id="tri-x1" type="number" placeholder="x1" class="form-control">
+                        <input id="tri-y1" type="number" placeholder="y1" class="form-control">
+                    </div>
+                    <div class="sub-cat-list" style="flex-direction:row; gap:10px; margin-top:10px;">
+                        <input id="tri-x2" type="number" placeholder="x2" class="form-control">
+                        <input id="tri-y2" type="number" placeholder="y2" class="form-control">
+                    </div>
+                    <div class="sub-cat-list" style="flex-direction:row; gap:10px; margin-top:10px;">
+                        <input id="tri-x3" type="number" placeholder="x3" class="form-control">
+                        <input id="tri-y3" type="number" placeholder="y3" class="form-control">
+                    </div>
+                    <button onclick="calculate()" class="sub-link" style="background:var(--primary-color); color:white; justify-content:center; margin-top:10px;">Calculate</button>
+                </div>
+
+                <!-- Fraction to Percentage -->
+                <div id="fracToPct" class="calculator">
+                    <h3>Fraction to Percentage</h3>
+                    <div class="sub-cat-list" style="flex-direction:row; gap:10px;">
+                        <input id="ftp-num" type="number" placeholder="Numerator" class="form-control">
+                        <input id="ftp-den" type="number" placeholder="Denominator" class="form-control">
+                    </div>
+                    <button onclick="calculate()" class="sub-link" style="background:var(--primary-color); color:white; justify-content:center; margin-top:10px;">Convert</button>
+                </div>
+
+                <!-- Percentage to Fraction -->
+                <div id="pctToFrac" class="calculator">
+                    <h3>Percentage to Fraction</h3>
+                    <input id="ptf-pct" type="number" placeholder="Percentage" class="form-control">
+                    <button onclick="calculate()" class="sub-link" style="background:var(--primary-color); color:white; justify-content:center; margin-top:10px;">Convert</button>
+                </div>
+            </div>
+
+            <div id="resultBox" class="cat-card stagger-3" style="display:none;">
+                <h3>Result</h3>
+                <div id="result-content" style="text-align:center; font-size: 1.2rem; color: var(--primary-color);"></div>
+            </div>
+        </section>
+
+        <footer class="content-footer">SMART HUB | All Rights Reserved © 2025</footer>
+    </main>
+</div>
+
+<script src="../script.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const toolSelector = document.getElementById('toolSelector');
+    const calculators = document.querySelectorAll('.calculator');
+
+    toolSelector.addEventListener('change', () => {
+        const selectedTool = toolSelector.value;
+        calculators.forEach(calc => {
+            if (calc.id === selectedTool) {
+                calc.classList.add('active');
+            } else {
+                calc.classList.remove('active');
+            }
+        });
+        document.getElementById('resultBox').style.display = 'none';
+    });
+});
+
+// --- Math Toolkit Functions ---
+const M = Math;
+function solveLinear(a, b) {
+    if (a === 0) return { error: b === 0 ? "Infinite solutions" : "No solution" };
+    return { x: -b / a, steps: `x = -b/a = ${-b}/${a} = ${-b/a}` };
+}
+function solve2x2(a1, b1, c1, a2, b2, c2) {
+    const denom = a1 * b2 - a2 * b1;
+    if (denom === 0) return { error: "No unique solution" };
+    const x = (c1 * b2 - c2 * b1) / denom;
+    const y = (a1 * c2 - a2 * c1) / denom;
+    return { x, y, steps: `x=(c1*b2-c2*b1)/denom; y=(a1*c2-a2*c1)/denom` };
+}
+function distance(x1, y1, x2, y2) {
+    const d = M.hypot(x2 - x1, y2 - y1);
+    return { distance: d, steps: `√[(x2-x1)²+(y2-y1)²] = ${d}` };
+}
+function midpoint(x1, y1, x2, y2) {
+    return { mid: [(x1 + x2) / 2, (y1 + y2) / 2], steps: "((x1+x2)/2, (y1+y2)/2)" };
+}
+function triangleAreaFromCoords(x1, y1, x2, y2, x3, y3) {
+    const area = 0.5 * Math.abs(x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2));
+    return { area, steps: "(1/2)|x1(y2-y3)+...|" };
+}
+function fractionToPercent(numer, denom) {
+    if (denom === 0) return { error: "Divide by zero" };
+    const pct = (numer / denom) * 100;
+    return { percent: pct, steps: `(${numer}/${denom})*100 = ${pct}%` };
+}
+function percentToFraction(p) {
+    const frac = p / 100;
+    return { fraction: frac, steps: `${p}% = ${frac}` };
+}
+
+function calculate() {
+    const tool = document.getElementById('toolSelector').value;
+    const resultBox = document.getElementById('resultBox');
+    const resultContent = document.getElementById('result-content');
+    let result;
+    let inputs = {};
+    let description = '';
+    let resultString = '';
+
+    try {
+        switch (tool) {
+            case 'linear':
+                inputs = { a: parseFloat(document.getElementById('linear-a').value), b: parseFloat(document.getElementById('linear-b').value) };
+                if(Object.values(inputs).some(isNaN)) throw new Error("Invalid input");
+                result = solveLinear(inputs.a, inputs.b);
+                description = `Solve ${inputs.a}x + ${inputs.b} = 0`;
+                resultString = result.error ? result.error : `x = ${result.x.toFixed(4)}`;
+                break;
+            case 'simultaneous':
+                inputs = { 
+                    a1: parseFloat(document.getElementById('sim-a1').value), b1: parseFloat(document.getElementById('sim-b1').value), c1: parseFloat(document.getElementById('sim-c1').value),
+                    a2: parseFloat(document.getElementById('sim-a2').value), b2: parseFloat(document.getElementById('sim-b2').value), c2: parseFloat(document.getElementById('sim-c2').value)
+                };
+                if(Object.values(inputs).some(isNaN)) throw new Error("Invalid input");
+                result = solve2x2(inputs.a1, inputs.b1, inputs.c1, inputs.a2, inputs.b2, inputs.c2);
+                description = "Solve simultaneous equations";
+                resultString = result.error ? result.error : `x = ${result.x.toFixed(4)}, y = ${result.y.toFixed(4)}`;
+                break;
+            case 'distance':
+                inputs = {
+                    x1: parseFloat(document.getElementById('dist-x1').value), y1: parseFloat(document.getElementById('dist-y1').value),
+                    x2: parseFloat(document.getElementById('dist-x2').value), y2: parseFloat(document.getElementById('dist-y2').value)
+                };
+                if(Object.values(inputs).some(isNaN)) throw new Error("Invalid input");
+                result = distance(inputs.x1, inputs.y1, inputs.x2, inputs.y2);
+                description = `Distance between (${inputs.x1},${inputs.y1}) and (${inputs.x2},${inputs.y2})`;
+                resultString = `Distance: ${result.distance.toFixed(4)}`;
+                break;
+            case 'midpoint':
+                inputs = {
+                    x1: parseFloat(document.getElementById('mid-x1').value), y1: parseFloat(document.getElementById('mid-y1').value),
+                    x2: parseFloat(document.getElementById('mid-x2').value), y2: parseFloat(document.getElementById('mid-y2').value)
+                };
+                if(Object.values(inputs).some(isNaN)) throw new Error("Invalid input");
+                result = midpoint(inputs.x1, inputs.y1, inputs.x2, inputs.y2);
+                description = `Midpoint of (${inputs.x1},${inputs.y1}) and (${inputs.x2},${inputs.y2})`;
+                resultString = `Midpoint: (${result.mid[0]}, ${result.mid[1]})`;
+                break;
+            case 'triangleArea':
+                 inputs = {
+                    x1: parseFloat(document.getElementById('tri-x1').value), y1: parseFloat(document.getElementById('tri-y1').value),
+                    x2: parseFloat(document.getElementById('tri-x2').value), y2: parseFloat(document.getElementById('tri-y2').value),
+                    x3: parseFloat(document.getElementById('tri-x3').value), y3: parseFloat(document.getElementById('tri-y3').value)
+                };
+                if(Object.values(inputs).some(isNaN)) throw new Error("Invalid input");
+                result = triangleAreaFromCoords(inputs.x1, inputs.y1, inputs.x2, inputs.y2, inputs.x3, inputs.y3);
+                description = `Area of triangle with given vertices`;
+                resultString = `Area: ${result.area.toFixed(4)}`;
+                break;
+            case 'fracToPct':
+                inputs = { num: parseFloat(document.getElementById('ftp-num').value), den: parseFloat(document.getElementById('ftp-den').value) };
+                if(Object.values(inputs).some(isNaN)) throw new Error("Invalid input");
+                result = fractionToPercent(inputs.num, inputs.den);
+                description = `Convert ${inputs.num}/${inputs.den} to percentage`;
+                resultString = result.error ? result.error : `${result.percent.toFixed(2)}%`;
+                break;
+            case 'pctToFrac':
+                inputs = { p: parseFloat(document.getElementById('ptf-pct').value) };
+                if(isNaN(inputs.p)) throw new Error("Invalid input");
+                result = percentToFraction(inputs.p);
+                description = `Convert ${inputs.p}% to fraction`;
+                resultString = `Fraction: ${result.fraction}`;
+                break;
+        }
+
+        resultContent.innerText = resultString;
+        resultBox.style.display = 'block';
+
+        if(typeof saveCalculation === "function"){
+            saveCalculation("Math Toolkit", description, `Result: ${resultString}`);
+        }
+    } catch (e) {
+        resultContent.innerText = e.message;
+        resultBox.style.display = 'block';
+    }
+}
+</script>
+</body>
+</html>
